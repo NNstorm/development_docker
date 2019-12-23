@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  steam:
+    image: modellingmind/cuda-steam-gaming
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - $HOME:/home/$USER
+      - /etc/sudoers:/etc/sudoers:ro
+    environment:
+      - DISPLAY=${DISPLAY}
+      - HOST_UID=$UID
+      - HOST_USER=$USER
+      - HOST_GID=$GID
+      - HOST_GROUP=$HOST_GROUP
+      - QT_X11_NO_MITSHM=1
