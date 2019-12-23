@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  cuda-opengl:
+    image: modellingmind/cuda-cudnn-opengl
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+    environment:
+      - DISPLAY=${DISPLAY}
+
+# don't forget to run 'xhost +' on the host machine to make it work properly
