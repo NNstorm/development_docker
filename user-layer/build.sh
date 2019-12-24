@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
 
+base_image=$1
+target_image=$2
+
+if [[ -z "${base_image}" ]]; then
+    echo "No base image given" 1>&2
+    exit 1
+fi
+
+if [[ -z "${target image}" ]]; then
+    echo "No target image given" 1>&2
+    exit 1
+fi
+
 set -e
 
-source ./../config.sh
-
-docker build -t ${repo_name}-userlayer --build-arg from=${repo_name}:latest .
-docker tag ${repo_name}-userlayer ${repo_name}-userlayer:${tag}
-
-docker push ${repo_name}-userlayer
-docker push ${repo_name}-userlayer:${tag}
+docker build -t ${target_image} --build-arg from=${base_image} .
