@@ -42,8 +42,6 @@ RUN wget --no-check-certificate  https://download.jetbrains.com/python/pycharm-p
     echo "/opt/pycharm/bin/pycharm.sh 2> /var/log/pycharm &" > /usr/bin/pycharm && \
     chmod +x /usr/bin/pycharm && (umask 000; touch /var/log/pycharm)
 
-RUN python /opt/pycharm/helpers/pydev/setup_cython.py build_ext --inplace
-
 RUN sed -i -r "s#ENV_PATH(.*)PATH=(.*)#ENV_PATH\1PATH=$PATH#" /etc/login.defs
 
 RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
@@ -56,7 +54,7 @@ ENV PATH /opt/conda/bin:$PATH
 RUN conda update conda && conda install pip
 ENV CONDA_AUTO_UPDATE_CONDA=true
 RUN conda install -y numpy pyyaml mkl mkl-include requests setuptools cmake cffi typing pip h5py \
-    graphviz opencv && conda clean -ya
+    graphviz opencv cython && conda clean -ya
 
 RUN /opt/conda/bin/pip install --upgrade pip
 
