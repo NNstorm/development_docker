@@ -1,9 +1,18 @@
 #!/usr/bin/env bash
 
+base_image=$1
+target_image=$2
+
+if [[ -z "${base_image}" ]]; then
+    echo "No base image given" 1>&2
+    exit 1
+fi
+
+if [[ -z "${target_image}" ]]; then
+    echo "No target image given" 1>&2
+    exit 1
+fi
+
 set -e
 
-source ./../config.sh
-
-docker build -t modellingmind/cuda-steam-gaming --build-arg from=${repo_name}-userlayer:latest .
-
-docker push modellingmind/cuda-steam-gaming
+docker build -t ${target_image} --build-arg from=${base_image} .

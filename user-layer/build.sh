@@ -8,7 +8,7 @@ if [[ -z "${base_image}" ]]; then
     exit 1
 fi
 
-if [[ -z "${target image}" ]]; then
+if [[ -z "${target_image}" ]]; then
     echo "No target image given" 1>&2
     exit 1
 fi
