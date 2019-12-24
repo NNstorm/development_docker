@@ -4,12 +4,30 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-- script: |
+variables:
+  repository: modellingmind
+
+jobs:
+- job: Login
+  - script: |
     docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
     # these variables are stored secretly in the Azure pipeline
   displayName: 'Login to docker hub with service user'
 
-- script: |
-    ./build_all.sh
-  displayName: 'Build all containers'
+- job: CUDA10
+  displayName: 'Build and publish Ubuntu 18.04 CUDA 10.0 CUDNN 7 containers'
+  variables:
+    ubuntu: ubuntu18.04
+    cuda: 10.0
+    cudnn: cudnn7
+    base_tag: $(cuda)-$(cudnn)-devel-$(ubuntu)
+    tag: $(ubuntu)-$(cuda)-$(cudnn)
+  steps:
+  - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(repository)/cuda-cudnn-opengl:$(tag)
+    displayName: "Build cuda opengl docker"
+  - script: user-layer/build.sh $(repository)/cuda-cudnn-opengl:$(tag) cuda-cudnn-opengl-userlayer:$(tag)
+    displayName: "Build user layer docker"
+  - script: docker push $(repository)/cuda-cudnn-opengl:$(tag)
+    displayName: "Push cuda opengl docker"
+  - script: docker push cuda-cudnn-opengl-userlayer:$(tag)
+    displayName: "Push cuda userlayer docker"
