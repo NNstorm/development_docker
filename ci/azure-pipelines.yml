@@ -5,7 +5,9 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  organization: modellingmind
+  - group: docker_hub_credentials
+  - name: organization
+    value: modellingmind
 
 jobs:
 - job: DockerLoginTest
