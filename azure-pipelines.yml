@@ -35,7 +35,7 @@ jobs:
     displayName: "Push cuda opengl docker"
   - script: docker push $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
     displayName: "Push cuda userlayer docker"
-  - script: docker push $(organization)/cuda-steam-docker:$(tag)
+  - script: docker push $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Push cuda steam docker"
 
 - job: CUDA101
@@ -60,7 +60,7 @@ jobs:
     displayName: "Push cuda opengl docker"
   - script: docker push $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
     displayName: "Push cuda userlayer docker"
-  - script: docker push $(organization)/cuda-steam-docker:$(tag)
+  - script: docker push $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Push cuda steam docker"
 
 - job: CUDA102
@@ -85,16 +85,16 @@ jobs:
     displayName: "Push cuda opengl docker"
   - script: docker push $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
     displayName: "Push cuda userlayer docker"
-  - script: docker push $(organization)/cuda-steam-docker:$(tag)
+  - script: docker push $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Push cuda steam docker"
 
   - script: |
       docker tag $(organization)/cuda-cudnn-opengl:$(tag) $(organization)/cuda-cudnn-opengl:latest
       docker tag $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/cuda-cudnn-opengl-userlayer:latest
-      docker tag $(organization)/cuda-steam-docker:$(tag) $(organization)/cuda-steam-docker:latest
+      docker tag $(organization)/cuda-steam-gaming:$(tag) $(organization)/cuda-steam-gaming:latest
     displayName: "Mark CUDA 10.2 images as latest"
   - script: |
       docker push $(organization)/cuda-cudnn-opengl:latest
       docker push $(organization)/cuda-cudnn-opengl-userlayer:latest
-      docker push $(organization)/cuda-steam-docker:latest
+      docker push $(organization)/cuda-steam-gaming:latest
     displayName: "Push latest tags for all images"
