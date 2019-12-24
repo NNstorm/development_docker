@@ -1,0 +1,9 @@
+PubkeyAuthentication yes
+ChallengeResponseAuthentication no
+UsePAM yes
+
+X11Forwarding yes
+
+# ENABLED PORTS:
+Port 20022
+

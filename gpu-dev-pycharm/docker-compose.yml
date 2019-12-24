@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  mind:
+    image: modellingmind/gpu-dev-pycharm
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - /home/$USER:/home/$USER
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/sudoers:/etc/sudoers:ro
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - HOST_UID=$UID
+      - HOST_USER=$USER
+      - HOST_GID=$GID
+      - HOST_GROUP=$HOST_GROUP
+      - _JAVA_OPTIONS=-Duser.home=/home/$USER/
+    ipc: host
+    extra_hosts:
+      - hive:127.0.0.1
+    container_name: hive
+    hostname: hive
+
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp=unconfined
