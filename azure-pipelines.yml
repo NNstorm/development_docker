@@ -37,7 +37,7 @@ jobs:
   - script: docker push $(organization)/cuda-steam-docker:$(tag)
     displayName: "Push cuda steam docker"
 
-- job: CUDA10.1
+- job: CUDA101
   dependsOn: DockerLogin
   displayName: 'Build and publish Ubuntu 18.04 CUDA 10.1 CUDNN 7 containers'
   variables:
@@ -61,7 +61,7 @@ jobs:
   - script: docker push $(organization)/cuda-steam-docker:$(tag)
     displayName: "Push cuda steam docker"
 
-- job: CUDA10.2
+- job: CUDA102
   dependsOn: DockerLogin
   displayName: 'Build and publish Ubuntu 18.04 CUDA 10.1 CUDNN 7 containers'
   variables:
