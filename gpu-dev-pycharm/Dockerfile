@@ -66,7 +66,7 @@ RUN pip install h5py-cache tqdm shapely tensorboard tensorboardX graphviz cython
     slackclient
 
 # Microsoft Azure CLI
-RUN wget https://aka.ms/InstallAzureCLIDeb && sh InstallAzureCLIDeb
+RUN cd /tmp && wget https://aka.ms/InstallAzureCLIDeb && bash ./InstallAzureCLIDeb && rm ./InstallAzureCLIDeb
 
 # General Workspace
 RUN mkdir -p /workspace
