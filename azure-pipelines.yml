@@ -9,10 +9,9 @@ variables:
 
 jobs:
 - job: Login
-  - script: |
-    docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
-    # these variables are stored secretly in the Azure pipeline
   displayName: 'Login to docker hub with service user'
+  steps:
+  - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
 
 - job: CUDA10
   displayName: 'Build and publish Ubuntu 18.04 CUDA 10.0 CUDNN 7 containers'
