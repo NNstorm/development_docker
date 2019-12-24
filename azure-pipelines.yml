@@ -8,7 +8,7 @@ variables:
   organization: modellingmind
 
 jobs:
-- job: DockerLogin
+- job: DockerLoginTest
   displayName: 'Login to docker hub with service user'
   steps:
   - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
@@ -30,6 +30,7 @@ jobs:
   - script: cd steam-games && ./build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Build steam docker"
 
+  - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
   - script: docker push $(organization)/cuda-cudnn-opengl:$(tag)
     displayName: "Push cuda opengl docker"
   - script: docker push $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
@@ -51,9 +52,10 @@ jobs:
     displayName: "Build cuda opengl docker"
   - script: cd user-layer && ./build.sh $(organization)/cuda-cudnn-opengl:$(tag) $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
     displayName: "Build user layer docker"
-  - script: cd steam-games && .build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/cuda-steam-gaming:$(tag)
+  - script: cd steam-games && ./build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Build steam docker"
 
+  - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
   - script: docker push $(organization)/cuda-cudnn-opengl:$(tag)
     displayName: "Push cuda opengl docker"
   - script: docker push $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
@@ -78,6 +80,7 @@ jobs:
   - script: cd steam-games && ./build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Build steam docker"
 
+  - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
   - script: docker push $(organization)/cuda-cudnn-opengl:$(tag)
     displayName: "Push cuda opengl docker"
   - script: docker push $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
