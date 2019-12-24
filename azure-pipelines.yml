@@ -25,9 +25,9 @@ jobs:
   steps:
   - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(organization)/cuda-cudnn-opengl:$(tag)
     displayName: "Build cuda opengl docker"
-  - script: cd user-layer && ./build.sh $(organization)/cuda-cudnn-opengl:$(tag) cuda-cudnn-opengl-userlayer:$(tag)
+  - script: cd user-layer && ./build.sh $(organization)/cuda-cudnn-opengl:$(tag) $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
     displayName: "Build user layer docker"
-  - script: cd steam-games && ./build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) cuda-steam-gaming:$(tag)
+  - script: cd steam-games && ./build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Build steam docker"
 
   - script: docker push $(organization)/cuda-cudnn-opengl:$(tag)
@@ -49,9 +49,9 @@ jobs:
   steps:
   - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(organization)/cuda-cudnn-opengl:$(tag)
     displayName: "Build cuda opengl docker"
-  - script: cd user-layer && ./build.sh $(organization)/cuda-cudnn-opengl:$(tag) cuda-cudnn-opengl-userlayer:$(tag)
+  - script: cd user-layer && ./build.sh $(organization)/cuda-cudnn-opengl:$(tag) $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
     displayName: "Build user layer docker"
-  - script: cd steam-games && .build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) cuda-steam-gaming:$(tag)
+  - script: cd steam-games && .build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Build steam docker"
 
   - script: docker push $(organization)/cuda-cudnn-opengl:$(tag)
@@ -73,9 +73,9 @@ jobs:
   steps:
   - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(organization)/cuda-cudnn-opengl:$(tag)
     displayName: "Build cuda opengl docker"
-  - script: cd user-layer && ./build.sh $(organization)/cuda-cudnn-opengl:$(tag) cuda-cudnn-opengl-userlayer:$(tag)
+  - script: cd user-layer && ./build.sh $(organization)/cuda-cudnn-opengl:$(tag) $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
     displayName: "Build user layer docker"
-  - script: cd steam-games && ./build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) cuda-steam-gaming:$(tag)
+  - script: cd steam-games && ./build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Build steam docker"
 
   - script: docker push $(organization)/cuda-cudnn-opengl:$(tag)
