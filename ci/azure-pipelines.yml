@@ -31,6 +31,8 @@ jobs:
     displayName: "Build user layer docker"
   - script: cd steam-games && ./build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Build steam docker"
+  - script: cd gpu-dev-pycharm && ./build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/gpu-dev-pycharm:$(tag)
+    displayName: "Build development docker"
 
   - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
     displayName: "Docker login"
@@ -40,6 +42,8 @@ jobs:
     displayName: "Push cuda userlayer docker"
   - script: docker push $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Push cuda steam docker"
+  - script: docker push $(organization)/gpu-dev-pycharm:$(tag)
+    displayName: "Push gpu development pycharm docker"
 
 - job: CUDA101
   dependsOn: DockerLoginTest
@@ -57,6 +61,8 @@ jobs:
     displayName: "Build user layer docker"
   - script: cd steam-games && ./build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Build steam docker"
+  - script: cd gpu-dev-pycharm && ./build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/gpu-dev-pycharm:$(tag)
+    displayName: "Build development docker"
 
   - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
     displayName: "Docker login"
@@ -66,6 +72,8 @@ jobs:
     displayName: "Push cuda userlayer docker"
   - script: docker push $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Push cuda steam docker"
+  - script: docker push $(organization)/gpu-dev-pycharm:$(tag)
+    displayName: "Push gpu development pycharm docker"
 
 - job: CUDA102
   dependsOn: DockerLoginTest
@@ -83,6 +91,8 @@ jobs:
     displayName: "Build user layer docker"
   - script: cd steam-games && ./build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Build steam docker"
+  - script: cd gpu-dev-pycharm && ./build.sh $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/gpu-dev-pycharm:$(tag)
+    displayName: "Build development docker"
 
   - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
     displayName: "Docker login"
@@ -92,14 +102,18 @@ jobs:
     displayName: "Push cuda userlayer docker"
   - script: docker push $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Push cuda steam docker"
+  - script: docker push $(organization)/gpu-dev-pycharm:$(tag)
+    displayName: "Push gpu development pycharm docker"
 
   - script: |
       docker tag $(organization)/cuda-cudnn-opengl:$(tag) $(organization)/cuda-cudnn-opengl:latest
       docker tag $(organization)/cuda-cudnn-opengl-userlayer:$(tag) $(organization)/cuda-cudnn-opengl-userlayer:latest
       docker tag $(organization)/cuda-steam-gaming:$(tag) $(organization)/cuda-steam-gaming:latest
+      docker tag $(organization)/gpu-dev-pycharm:$(tag) $(organization)/gpu-dev-pycharm:latest
     displayName: "Mark CUDA 10.2 images as latest"
   - script: |
       docker push $(organization)/cuda-cudnn-opengl:latest
       docker push $(organization)/cuda-cudnn-opengl-userlayer:latest
       docker push $(organization)/cuda-steam-gaming:latest
+      docker push $(organization)/gpu-dev-pycharm:latest
     displayName: "Push latest tags for all images"
