@@ -31,6 +31,7 @@ jobs:
     displayName: "Build steam docker"
 
   - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
+    displayName: "Docker login"
   - script: docker push $(organization)/cuda-cudnn-opengl:$(tag)
     displayName: "Push cuda opengl docker"
   - script: docker push $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
@@ -56,6 +57,7 @@ jobs:
     displayName: "Build steam docker"
 
   - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
+    displayName: "Docker login"
   - script: docker push $(organization)/cuda-cudnn-opengl:$(tag)
     displayName: "Push cuda opengl docker"
   - script: docker push $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
@@ -81,6 +83,7 @@ jobs:
     displayName: "Build steam docker"
 
   - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
+    displayName: "Docker login"
   - script: docker push $(organization)/cuda-cudnn-opengl:$(tag)
     displayName: "Push cuda opengl docker"
   - script: docker push $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
