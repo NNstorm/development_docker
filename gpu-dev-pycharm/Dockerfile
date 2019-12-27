@@ -8,7 +8,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
     build-essential autoconf automake \
     sudo vim nano git curl wget tree \
-    krb5-user krb5-locales libpam-krb5 \
     python-numpy python-scipy python-opencv \
     python python-dev python-setuptools python-pip \
     python3 python3-dev python3-setuptools python3-pip \
@@ -20,9 +19,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     openssh-server cmake gdb build-essential clang llvm lldb ccache \
     zsh sl cowsay git-lfs rsync \
     inetutils-ping traceroute openssh-server openssh-client \
-    curl ca-certificates \
+    ca-certificates \
     bzip2 libjpeg-dev libpng-dev \
     cmake build-essential libx11-6 libgtk2.0-0 \
+    tmux htop \
     libcanberra-gtk-module protobuf-compiler libprotoc-dev && \
     update-ccache-symlinks && \
     apt-get clean && \

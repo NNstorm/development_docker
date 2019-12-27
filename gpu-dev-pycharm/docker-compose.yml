@@ -5,8 +5,7 @@ services:
     image: modellingmind/gpu-dev-pycharm
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:ro
-      - /home/$USER:/home/$USER
-      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - $HOME:/home/$USER
       - /etc/timezone:/etc/timezone:ro
       - /etc/sudoers:/etc/sudoers:ro
     environment:
