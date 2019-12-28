@@ -1,0 +1,17 @@
+h5py-cache
+tqdm
+shapely
+tensorboard
+tensorboardX
+graphviz
+cython
+matplotlib
+onnx
+folium
+dash
+pandas
+plotly
+slackclient
+pylint
+tensorflow-gpu
+haikunator

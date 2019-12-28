@@ -36,3 +36,18 @@ Supported CUDA versions: `10.0`, `10.1`, `10.2` in all images, `latest` is assoc
 
 ### `modellingmind/gpu-dev-pycharm`
 [DockerHUB link](https://hub.docker.com/repository/docker/modellingmind/gpu-dev-pycharm)
+
+Start interactive session:
+```bash
+docker-compose -f gpu-dev-pycharm/docker-compose.yml run dev
+```
+
+Start ssh service (background):
+```bash
+docker-compose -f gpu-dev-pycharm/docker-compose.yml up -d ssh
+```
+
+Kill ssh service:
+```bash
+docker-compose -f gpu-dev-pycharm/docker-compose.yml down ssh
+```
