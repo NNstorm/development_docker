@@ -22,7 +22,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     ca-certificates \
     bzip2 libjpeg-dev libpng-dev \
     cmake build-essential libx11-6 libgtk2.0-0 \
-    tmux htop \
+    tmux htop net-tools \
     libcanberra-gtk-module protobuf-compiler libprotoc-dev && \
     update-ccache-symlinks && \
     apt-get clean && \
@@ -61,9 +61,10 @@ RUN /opt/conda/bin/pip install --upgrade pip
 
 ENV CMAKE_PREFIX_PATH="$(dirname $(which conda))/../"
 RUN conda install pytorch cython -c pytorch && conda clean -ya
+RUN conda install -c conda-forge jupyterlab notebook && conda clean -ya
 
-RUN pip install h5py-cache tqdm shapely tensorboard tensorboardX graphviz cython matplotlib onnx folium dash pandas plotly \
-    slackclient
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --upgrade -r /tmp/requirements.txt && rm /tmp/requirements.txt
 
 # Microsoft Azure CLI
 RUN cd /tmp && wget https://aka.ms/InstallAzureCLIDeb && bash ./InstallAzureCLIDeb && rm ./InstallAzureCLIDeb
@@ -75,7 +76,6 @@ WORKDIR /workspace
 # Set up ssh server for VS code development in Azure/AWS cloud
 COPY sshd_config /etc/ssh/sshd_config
 RUN mkdir /var/run/sshd
-#RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # SSH login fix. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
