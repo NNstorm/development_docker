@@ -3,6 +3,7 @@ ChallengeResponseAuthentication no
 UsePAM yes
 
 X11Forwarding yes
+X11UseLocalhost no
 
 # ENABLED PORTS:
 Port 20022

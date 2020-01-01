@@ -19,7 +19,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     openssh-server cmake gdb build-essential clang llvm lldb ccache \
     zsh sl cowsay git-lfs rsync \
     inetutils-ping traceroute openssh-server openssh-client \
-    ca-certificates \
+    ca-certificates xauth \
     bzip2 libjpeg-dev libpng-dev \
     cmake build-essential libx11-6 libgtk2.0-0 \
     tmux htop net-tools \
@@ -80,3 +80,5 @@ RUN mkdir /var/run/sshd
 # SSH login fix. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 EXPOSE 20022
+
+RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf

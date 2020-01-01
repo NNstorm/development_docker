@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.7'
 
 services:
   dev:
@@ -49,8 +49,9 @@ services:
       - SYS_PTRACE
     security_opt:
       - seccomp=unconfined
-    network_mode: host
     entrypoint:
       - /bin/bash
       - -c
       - /usr/sbin/sshd && /entrypoint.sh bash -c "while true; do sleep 2; done"
+    ports:
+      - 20022:20022
