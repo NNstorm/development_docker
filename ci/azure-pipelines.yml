@@ -1,6 +1,15 @@
 trigger:
-- master
-pr: none
+  - master
+pr: 
+  branches:
+    include:
+    - master
+schedules:
+  - cron: "0 0 * * *"
+    displayName: Daily midnight build
+    branches:
+      include:
+      - master
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -39,12 +48,16 @@ jobs:
     displayName: "Docker login"
   - script: docker push $(organization)/cuda-cudnn-opengl:$(tag)
     displayName: "Push cuda opengl docker"
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - script: docker push $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
     displayName: "Push cuda userlayer docker"
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - script: docker push $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Push cuda steam docker"
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - script: docker push $(organization)/gpu-dev-pycharm:$(tag)
     displayName: "Push gpu development pycharm docker"
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
 
 - job: CUDA101
   dependsOn: DockerLoginTest
@@ -69,12 +82,16 @@ jobs:
     displayName: "Docker login"
   - script: docker push $(organization)/cuda-cudnn-opengl:$(tag)
     displayName: "Push cuda opengl docker"
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - script: docker push $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
     displayName: "Push cuda userlayer docker"
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - script: docker push $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Push cuda steam docker"
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - script: docker push $(organization)/gpu-dev-pycharm:$(tag)
     displayName: "Push gpu development pycharm docker"
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
 
 - job: CUDA102
   dependsOn: DockerLoginTest
@@ -99,12 +116,16 @@ jobs:
     displayName: "Docker login"
   - script: docker push $(organization)/cuda-cudnn-opengl:$(tag)
     displayName: "Push cuda opengl docker"
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - script: docker push $(organization)/cuda-cudnn-opengl-userlayer:$(tag)
     displayName: "Push cuda userlayer docker"
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - script: docker push $(organization)/cuda-steam-gaming:$(tag)
     displayName: "Push cuda steam docker"
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - script: docker push $(organization)/gpu-dev-pycharm:$(tag)
     displayName: "Push gpu development pycharm docker"
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
 
   - script: |
       docker tag $(organization)/cuda-cudnn-opengl:$(tag) $(organization)/cuda-cudnn-opengl:latest
@@ -118,3 +139,4 @@ jobs:
       docker push $(organization)/cuda-steam-gaming:latest
       docker push $(organization)/gpu-dev-pycharm:latest
     displayName: "Push latest tags for all images"
+    condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
