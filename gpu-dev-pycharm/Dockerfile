@@ -22,7 +22,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     ca-certificates xauth \
     bzip2 libjpeg-dev libpng-dev \
     cmake build-essential libx11-6 libgtk2.0-0 \
-    tmux htop net-tools \
+    tmux htop net-tools dnsutils \
     libcanberra-gtk-module protobuf-compiler libprotoc-dev && \
     update-ccache-symlinks && \
     apt-get clean && \
