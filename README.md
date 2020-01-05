@@ -1,7 +1,7 @@
 # Development Docker images
 Deep learning development tools using Docker
 
-[![Build Status](https://dev.azure.com/ModellingMind/ModellingMind/_apis/build/status/Docker%20build%20and%20publish?branchName=master)](https://dev.azure.com/ModellingMind/ModellingMind/_build/latest?definitionId=4&branchName=master)
+[![Build Status](https://dev.azure.com/ModellingMind/ModellingMind/_apis/build/status/Docker%20build%20and%20publish%20master?branchName=master)](https://dev.azure.com/ModellingMind/ModellingMind/_build/latest?definitionId=4&branchName=master)
 
 
 ## Instructions
