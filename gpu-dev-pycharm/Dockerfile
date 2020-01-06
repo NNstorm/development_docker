@@ -3,28 +3,16 @@ FROM $from
 
 ARG PYCHARM=2019.3.1
 
-# Install make and compilers and extra stuff
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
-    build-essential autoconf automake \
-    sudo vim nano git curl wget tree \
-    python-numpy python-scipy python-opencv \
-    python python-dev python-setuptools python-pip \
-    python3 python3-dev python3-setuptools python3-pip \
-    flake8 pydocstyle python3-pydocstyle \
-    gcc git openssh-client libfontconfig1 \
-    vim emacs python tcpdump telnet byacc flex \
-    iproute2 gdbserver less bison valgrind \
-    libxtst-dev libxext-dev libxrender-dev libfreetype6-dev \
-    openssh-server cmake gdb build-essential clang llvm lldb ccache \
-    zsh sl cowsay git-lfs rsync \
-    inetutils-ping traceroute openssh-server openssh-client \
-    ca-certificates xauth \
-    bzip2 libjpeg-dev libpng-dev \
-    cmake build-essential libx11-6 libgtk2.0-0 \
-    tmux htop net-tools dnsutils \
-    libcanberra-gtk-module protobuf-compiler libprotoc-dev && \
-    update-ccache-symlinks && \
+# Install make and compilers
+RUN apt update && \
+    apt install -y \
+    autoconf automake bison build-essential byacc bzip2 ca-certificates ccache clang cmake cowsay curl dnsutils \
+    emacs flake8 flex gcc gdb gdbserver git git-lfs htop inetutils-ping iproute2 less libcanberra-gtk-module \
+    libfontconfig1 libfreetype6-dev libgtk2.0-0 libjpeg-dev libpng-dev libprotoc-dev libx11-6 libxext-dev \
+    libxrender-dev libxtst-dev lldb llvm nano net-tools openssh-client openssh-server protobuf-compiler \
+    pydocstyle python python-dev python-numpy python-opencv python-pip python-scipy python-setuptools \
+    python3 python3-dev python3-pip python3-pydocstyle python3-setuptools rsync sl sudo tcpdump telnet \
+    tmux traceroute tree update-ccache-symlinks valgrind vim wget xauth zsh  && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
@@ -37,8 +25,7 @@ WORKDIR /opt
 ENV PYCHARM_VERSION=${PYCHARM}
 RUN wget --no-check-certificate  https://download.jetbrains.com/python/pycharm-professional-${PYCHARM}.tar.gz && \
     tar xvzf pycharm-professional-${PYCHARM}.tar.gz && \
-    rm pycharm-professional-${PYCHARM}.tar.gz && \
-    mv pycharm* pycharm && \
+    rm pycharm-professional-${PYCHARM}.tar.gz && mv pycharm* pycharm && \
     echo "/opt/pycharm/bin/pycharm.sh 2> /var/log/pycharm &" > /usr/bin/pycharm && \
     chmod +x /usr/bin/pycharm && (umask 000; touch /var/log/pycharm)
 
@@ -54,24 +41,16 @@ ENV PATH /opt/conda/bin:$PATH
 RUN conda update conda && conda install pip
 ENV CONDA_AUTO_UPDATE_CONDA=true
 RUN conda install -y numpy pyyaml mkl mkl-include requests setuptools cmake cffi typing pip h5py \
-    graphviz opencv cython && conda clean -ya
+    graphviz opencv cython jupyterlab notebook && conda clean -ya
 
 RUN /opt/conda/bin/pip install --upgrade pip
-
-
-ENV CMAKE_PREFIX_PATH="$(dirname $(which conda))/../"
-RUN conda install pytorch cython -c pytorch && conda clean -ya
-RUN conda install -c conda-forge jupyterlab notebook && conda clean -ya
+RUN conda install pytorch -c pytorch && conda clean -ya
 
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --upgrade -r /tmp/requirements.txt && rm /tmp/requirements.txt
 
 # Microsoft Azure CLI
 RUN cd /tmp && wget https://aka.ms/InstallAzureCLIDeb && bash ./InstallAzureCLIDeb && rm ./InstallAzureCLIDeb
-
-# General Workspace
-RUN mkdir -p /workspace
-WORKDIR /workspace
 
 # Set up ssh server for VS code development in Azure/AWS cloud
 COPY sshd_config /etc/ssh/sshd_config

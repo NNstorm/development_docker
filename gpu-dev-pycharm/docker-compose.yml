@@ -29,13 +29,10 @@ services:
   ssh:
     image: modellingmind/gpu-dev-pycharm
     volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:ro
       - $HOME:/home/$USER
       - /etc/timezone:/etc/timezone:ro
       - /etc/sudoers:/etc/sudoers:ro
     environment:
-      - DISPLAY=${DISPLAY}
-      - QT_X11_NO_MITSHM=1
       - HOST_UID=$UID
       - HOST_USER=$USER
       - HOST_GID=$GID
