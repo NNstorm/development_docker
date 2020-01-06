@@ -15,3 +15,4 @@ slackclient
 pylint
 tensorflow-gpu
 haikunator
+autopep8
