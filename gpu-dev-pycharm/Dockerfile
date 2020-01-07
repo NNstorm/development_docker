@@ -4,8 +4,8 @@ FROM $from
 ARG PYCHARM=2019.3.1
 
 # Install make and compilers
-RUN apt update && \
-    apt install -y \
+RUN DEBIAN_FRONTEND=noninteractive apt update && \
+    DEBIAN_FRONTEND=noninteractive apt install -y \
     autoconf automake bison build-essential byacc bzip2 ca-certificates ccache clang cmake cowsay curl dnsutils \
     emacs flake8 flex gcc gdb gdbserver git git-lfs htop inetutils-ping iproute2 less libcanberra-gtk-module \
     libfontconfig1 libfreetype6-dev libgtk2.0-0 libjpeg-dev libpng-dev libprotoc-dev libx11-6 libxext-dev \
