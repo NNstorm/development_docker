@@ -12,7 +12,7 @@ RUN apt update && \
     libxrender-dev libxtst-dev lldb llvm nano net-tools openssh-client openssh-server protobuf-compiler \
     pydocstyle python python-dev python-numpy python-opencv python-pip python-scipy python-setuptools \
     python3 python3-dev python3-pip python3-pydocstyle python3-setuptools rsync sl sudo tcpdump telnet \
-    tmux traceroute tree update-ccache-symlinks valgrind vim wget xauth zsh  && \
+    tmux traceroute tree valgrind vim wget xauth zsh  && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
