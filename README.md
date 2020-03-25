@@ -18,6 +18,20 @@ export HOST_GROUP=$(id -g -n)
 export UID=${UID}
 ```
 
+Set Nvidia as default container runtime for Docker in `/etc/docker/daemon.json`:
+```
+{
+    "default-runtime": "nvidia",
+    "runtimes": {
+        "nvidia": {
+            "path": "nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    }
+}
+```
+
+
 ## Available Docker images
 Supported CUDA versions: `10.0`, `10.1`, `10.2` in all images, `latest` is associated with `10.2`.
 
