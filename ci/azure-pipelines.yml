@@ -20,18 +20,24 @@ variables:
     value: modellingmind
   - name: ubuntu
     value: ubuntu18.04
+  - name: azure_dtr
+    value: xmind.azurecr.io
 
 stages:
   - stage: DockerDependencyTest
-    dependsOn:
-      - DockerDependencyTest
     displayName: "Login to docker hub with service user"
     jobs:
-      - job: TestLogin
+      - job: TestLoginDockerHub
         steps:
           - checkout: none
-          - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
-  - stage: BuildContainers
+          - script: docker login -u $(dockerhub-user) --password $(dockerhub-token)
+      - job: TestLoginAzureRegistry
+        steps:
+          - checkout: none
+          - script: docker login -u $(azure-container-registry-user) --password $(azure-container-registry-password)
+  - stage: Build_CUDA_10
+    dependsOn:
+      - DockerDependencyTest
     jobs:
       - job: CUDA10
         displayName: "Build and publish Ubuntu 18.04 CUDA 10.0 CUDNN 7 containers"
@@ -48,7 +54,7 @@ stages:
           - script: cd gpu-dev-pycharm && ./build.sh $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag) $(dockerhub_org)/gpu-dev-pycharm:$(tag)
             displayName: "Build development docker"
 
-          - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
+          - script: docker login -u $(dockerhub-user) --password $(dockerhub-token)
             displayName: "Docker login"
           - script: docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
             displayName: "Push cuda opengl docker"
@@ -59,7 +65,10 @@ stages:
           - script: docker push $(dockerhub_org)/gpu-dev-pycharm:$(tag)
             displayName: "Push gpu development pycharm docker"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-
+  - stage: Build_CUDA_10.1
+    dependsOn:
+      - DockerDependencyTest
+    jobs:
       - job: CUDA101
         displayName: "Build and publish Ubuntu 18.04 CUDA 10.1 CUDNN 7 containers"
         variables:
@@ -75,7 +84,7 @@ stages:
           - script: cd gpu-dev-pycharm && ./build.sh $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag) $(dockerhub_org)/gpu-dev-pycharm:$(tag)
             displayName: "Build development docker"
 
-          - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
+          - script: docker login -u $(dockerhub-user) --password $(dockerhub-token)
             displayName: "Docker login"
           - script: docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
             displayName: "Push cuda opengl docker"
@@ -86,7 +95,10 @@ stages:
           - script: docker push $(dockerhub_org)/gpu-dev-pycharm:$(tag)
             displayName: "Push gpu development pycharm docker"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-
+  - stage: Build_CUDA_10.2
+    dependsOn:
+      - DockerDependencyTest
+    jobs:
       - job: CUDA102
         displayName: "Build and publish Ubuntu 18.04 CUDA 10.2 CUDNN 7 containers"
         variables:
@@ -102,7 +114,7 @@ stages:
           - script: cd gpu-dev-pycharm && ./build.sh $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag) $(dockerhub_org)/gpu-dev-pycharm:$(tag)
             displayName: "Build development docker"
 
-          - script: docker login -u $(DOCKERHUBUSER) --password $(DOCKERHUBTOKEN)
+          - script: docker login -u $(dockerhub-user) --password $(dockerhub-token)
             displayName: "Docker login"
           - script: docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
             displayName: "Push cuda opengl docker"
@@ -125,3 +137,6 @@ stages:
               docker push $(dockerhub_org)/gpu-dev-pycharm:latest
             displayName: "Push latest tags for all images"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+  - stage: Publish
+    dependsOn:
+      - DockerDependencyTest
