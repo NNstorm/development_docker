@@ -65,7 +65,7 @@ stages:
           - script: docker push $(dockerhub_org)/gpu-dev-pycharm:$(tag)
             displayName: "Push gpu development pycharm docker"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-  - stage: Build_CUDA_10.1
+  - stage: Build_CUDA_10_1
     dependsOn:
       - DockerDependencyTest
     jobs:
@@ -95,7 +95,7 @@ stages:
           - script: docker push $(dockerhub_org)/gpu-dev-pycharm:$(tag)
             displayName: "Push gpu development pycharm docker"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-  - stage: Build_CUDA_10.2
+  - stage: Build_CUDA_10_2
     dependsOn:
       - DockerDependencyTest
     jobs:
@@ -137,6 +137,12 @@ stages:
               docker push $(dockerhub_org)/gpu-dev-pycharm:latest
             displayName: "Push latest tags for all images"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+  - stage: TestContainers
+    dependsOn:
+      - Build_CUDA_10
+      - Build_CUDA_10_1
+      - Build_CUDA_10_2
+
   - stage: Publish
     dependsOn:
-      - DockerDependencyTest
+      - TestTestContainers
