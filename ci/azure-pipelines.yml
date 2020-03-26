@@ -133,7 +133,17 @@ stages:
       - Build_CUDA_10
       - Build_CUDA_10_1
       - Build_CUDA_10_2
+    jobs:
+      - job: Unittest
+        steps:
+          - checkout: self
+          - script: echo "please write tests for the containers..."
 
   - stage: PublishToAzure
     dependsOn:
       - TestContainers
+    jobs:
+      - job: Unittest
+        steps:
+          - checkout: self
+          - script: echo "Internal publishing for faster deployment"
