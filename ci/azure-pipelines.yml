@@ -56,14 +56,11 @@ stages:
 
           - script: docker login -u $(dockerhub-user) --password $(dockerhub-token)
             displayName: "Docker login"
-          - script: docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
-            displayName: "Push cuda opengl docker"
-            condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-          - script: docker push $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag)
-            displayName: "Push cuda userlayer docker"
-            condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-          - script: docker push $(dockerhub_org)/gpu-dev-pycharm:$(tag)
-            displayName: "Push gpu development pycharm docker"
+          - script: |
+              docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
+              docker push $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag)
+              docker push $(dockerhub_org)/gpu-dev-pycharm:$(tag)
+            displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - stage: Build_CUDA_10_1
     dependsOn:
@@ -86,14 +83,11 @@ stages:
 
           - script: docker login -u $(dockerhub-user) --password $(dockerhub-token)
             displayName: "Docker login"
-          - script: docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
-            displayName: "Push cuda opengl docker"
-            condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-          - script: docker push $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag)
-            displayName: "Push cuda userlayer docker"
-            condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-          - script: docker push $(dockerhub_org)/gpu-dev-pycharm:$(tag)
-            displayName: "Push gpu development pycharm docker"
+          - script: |
+              docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
+              docker push $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag)
+              docker push $(dockerhub_org)/gpu-dev-pycharm:$(tag)
+            displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - stage: Build_CUDA_10_2
     dependsOn:
@@ -116,14 +110,11 @@ stages:
 
           - script: docker login -u $(dockerhub-user) --password $(dockerhub-token)
             displayName: "Docker login"
-          - script: docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
-            displayName: "Push cuda opengl docker"
-            condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-          - script: docker push $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag)
-            displayName: "Push cuda userlayer docker"
-            condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-          - script: docker push $(dockerhub_org)/gpu-dev-pycharm:$(tag)
-            displayName: "Push gpu development pycharm docker"
+          - script: |
+              docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
+              docker push $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag)
+              docker push $(dockerhub_org)/gpu-dev-pycharm:$(tag)
+            displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
 
           - script: |
@@ -143,6 +134,6 @@ stages:
       - Build_CUDA_10_1
       - Build_CUDA_10_2
 
-  - stage: Publish
+  - stage: PublishToAzure
     dependsOn:
-      - TestTestContainers
+      - TestContainers
