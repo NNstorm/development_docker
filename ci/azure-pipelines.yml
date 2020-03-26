@@ -30,11 +30,11 @@ stages:
       - job: TestLoginDockerHub
         steps:
           - checkout: none
-          - script: docker login -u $(dockerhub-user) --password $(dockerhub-token)
+          - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
       - job: TestLoginAzureRegistry
         steps:
           - checkout: none
-          - script: docker login -u $(azure-container-registry-user) --password $(azure-container-registry-password)
+          - script: echo "$(azure-container-registry-password)" | docker login -u $(azure-container-registry-user) --password-stdin $(azure_dtr)
   - stage: Build_CUDA_10
     dependsOn:
       - DockerDependencyTest
@@ -54,7 +54,7 @@ stages:
           - script: cd gpu-dev-pycharm && ./build.sh $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag) $(dockerhub_org)/gpu-dev-pycharm:$(tag)
             displayName: "Build development docker"
 
-          - script: docker login -u $(dockerhub-user) --password $(dockerhub-token)
+          - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
             displayName: "Docker login"
           - script: |
               docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
@@ -81,7 +81,7 @@ stages:
           - script: cd gpu-dev-pycharm && ./build.sh $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag) $(dockerhub_org)/gpu-dev-pycharm:$(tag)
             displayName: "Build development docker"
 
-          - script: docker login -u $(dockerhub-user) --password $(dockerhub-token)
+          - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
             displayName: "Docker login"
           - script: |
               docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
@@ -108,7 +108,7 @@ stages:
           - script: cd gpu-dev-pycharm && ./build.sh $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag) $(dockerhub_org)/gpu-dev-pycharm:$(tag)
             displayName: "Build development docker"
 
-          - script: docker login -u $(dockerhub-user) --password $(dockerhub-token)
+          - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
             displayName: "Docker login"
           - script: |
               docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
