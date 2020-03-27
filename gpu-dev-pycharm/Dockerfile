@@ -32,10 +32,10 @@ RUN wget --no-check-certificate  https://download.jetbrains.com/python/pycharm-p
 RUN sed -i -r "s#ENV_PATH(.*)PATH=(.*)#ENV_PATH\1PATH=$PATH#" /etc/login.defs
 
 RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
-     chmod +x ~/miniconda.sh && \
-     ~/miniconda.sh -b -p /opt/conda && \
-     rm ~/miniconda.sh && \
-     /opt/conda/bin/conda clean -ya
+    chmod +x ~/miniconda.sh && \
+    ~/miniconda.sh -b -p /opt/conda && \
+    rm ~/miniconda.sh && \
+    /opt/conda/bin/conda clean -ya
 
 ENV PATH /opt/conda/bin:$PATH
 RUN conda update conda && conda install pip
@@ -45,6 +45,10 @@ RUN conda install -y numpy pyyaml mkl mkl-include requests setuptools cmake cffi
 
 RUN /opt/conda/bin/pip install --upgrade pip
 RUN conda install pytorch -c pytorch && conda clean -ya
+
+# Install CUDA RAPIDS
+COPY rapids.sh /tmp/rapids.sh
+RUN /tmp/rapids.sh && rm /tmp/rapids.sh
 
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --upgrade -r /tmp/requirements.txt && rm /tmp/requirements.txt
