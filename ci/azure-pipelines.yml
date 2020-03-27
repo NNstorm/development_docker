@@ -40,6 +40,7 @@ stages:
       - DockerDependencyTest
     jobs:
       - job: CUDA10
+        timeoutInMinutes: 120
         displayName: "Build and publish Ubuntu 18.04 CUDA 10.0 CUDNN 7 containers"
         variables:
           cuda: 10.0
@@ -67,6 +68,7 @@ stages:
       - DockerDependencyTest
     jobs:
       - job: CUDA101
+        timeoutInMinutes: 120
         displayName: "Build and publish Ubuntu 18.04 CUDA 10.1 CUDNN 7 containers"
         variables:
           cuda: 10.1
@@ -94,6 +96,7 @@ stages:
       - DockerDependencyTest
     jobs:
       - job: CUDA102
+        timeoutInMinutes: 120
         displayName: "Build and publish Ubuntu 18.04 CUDA 10.2 CUDNN 7 containers"
         variables:
           cuda: 10.2
