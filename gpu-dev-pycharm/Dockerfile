@@ -40,15 +40,18 @@ RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-la
 ENV PATH /opt/conda/bin:$PATH
 RUN conda update conda && conda install pip
 ENV CONDA_AUTO_UPDATE_CONDA=true
-RUN conda install -y numpy pyyaml mkl mkl-include requests setuptools cmake cffi typing pip h5py \
-    graphviz opencv cython jupyterlab notebook && conda clean -ya
 
 RUN /opt/conda/bin/pip install --upgrade pip
-RUN conda install pytorch -c pytorch && conda clean -ya
+
+RUN conda install -y numpy pyyaml mkl mkl-include requests setuptools cmake cffi typing pip h5py \
+    graphviz opencv cython jupyterlab notebook && conda clean -ya
 
 # Install CUDA RAPIDS
 COPY rapids.sh /tmp/rapids.sh
 RUN /tmp/rapids.sh && rm /tmp/rapids.sh
+
+# Install PyTorch
+RUN conda install pytorch -c pytorch && conda clean -ya
 
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --upgrade -r /tmp/requirements.txt && rm /tmp/requirements.txt
