@@ -1,5 +1,5 @@
 ARG from
-FROM $from
+FROM $from as baseconfig
 
 ARG PYCHARM=2019.3.1
 
@@ -20,16 +20,18 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
 RUN echo "fs.inotify.max_user_watches = 524288" >> /etc/sysctl.conf
 RUN sysctl -p --system
 
-# install PyCharm
-WORKDIR /opt
-ENV PYCHARM_VERSION=${PYCHARM}
-RUN wget --no-check-certificate  https://download.jetbrains.com/python/pycharm-professional-${PYCHARM}.tar.gz && \
-    tar xvzf pycharm-professional-${PYCHARM}.tar.gz && \
-    rm pycharm-professional-${PYCHARM}.tar.gz && mv pycharm* pycharm && \
-    echo "/opt/pycharm/bin/pycharm.sh 2> /var/log/pycharm &" > /usr/bin/pycharm && \
-    chmod +x /usr/bin/pycharm && (umask 000; touch /var/log/pycharm)
+# Set up ssh server for VS code development in Azure/AWS cloud
+COPY sshd_config /etc/ssh/sshd_config
+RUN mkdir /var/run/sshd
 
-RUN sed -i -r "s#ENV_PATH(.*)PATH=(.*)#ENV_PATH\1PATH=$PATH#" /etc/login.defs
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+EXPOSE 20022
+RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf
+
+# End of baseconfig
+
+FROM baseconfig as conda
 
 RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
     chmod +x ~/miniconda.sh && \
@@ -38,33 +40,32 @@ RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-la
     /opt/conda/bin/conda clean -ya
 
 ENV PATH /opt/conda/bin:$PATH
-RUN conda update conda && conda install pip
-ENV CONDA_AUTO_UPDATE_CONDA=true
+RUN conda update conda && conda install -y pip && conda clean -ya
+ENV CONDA_AUTO_UPDATE_CONDA=false
 
-RUN /opt/conda/bin/pip install --upgrade pip
-
-RUN conda install -y numpy pyyaml mkl mkl-include requests setuptools cmake cffi typing pip h5py \
-    graphviz opencv cython jupyterlab notebook && conda clean -ya
+FROM conda as rapids
 
 # Install CUDA RAPIDS
+COPY requirements.txt /tmp/requirements.txt
 COPY rapids.sh /tmp/rapids.sh
 RUN /tmp/rapids.sh && rm /tmp/rapids.sh
 
-# Install PyTorch
-RUN conda install pytorch -c pytorch && conda clean -ya
+# FROM rapids as pylibs
 
-COPY requirements.txt /tmp/requirements.txt
-RUN pip install --upgrade -r /tmp/requirements.txt && rm /tmp/requirements.txt
+# # Install PyTorch
+# RUN conda install -y numpy pyyaml mkl mkl-include requests setuptools cmake cffi typing h5py \
+#     graphviz opencv cython jupyterlab notebook ipython && conda clean -ya
 
+# RUN conda install pytorch -c pytorch --override-channels && conda clean -ya
+
+
+# RUN pip install --upgrade -r /tmp/requirements.txt && rm /tmp/requirements.txt
+
+FROM rapids
 # Microsoft Azure CLI
-RUN cd /tmp && wget https://aka.ms/InstallAzureCLIDeb && bash ./InstallAzureCLIDeb && rm ./InstallAzureCLIDeb
+RUN cd /tmp && wget https://aka.ms/InstallAzureCLIDeb && bash ./InstallAzureCLIDeb && rm ./InstallAzureCLIDeb &&\
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/*
 
-# Set up ssh server for VS code development in Azure/AWS cloud
-COPY sshd_config /etc/ssh/sshd_config
-RUN mkdir /var/run/sshd
 
-# SSH login fix. Otherwise user is kicked off after login
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-EXPOSE 20022
-
-RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf

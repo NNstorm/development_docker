@@ -1,16 +1,20 @@
 #!/bin/bash
+set -e
+
+common="conda install -y -c rapidsai-nightly -c nvidia -c conda-forge -c defaults -c pytorch -c anaconda python=3.7 --file /tmp/requirements.txt"
 
 if [[ -d "/usr/local/cuda-10.0" ]]
 then
-    conda install -c rapidsai-nightly -c nvidia -c conda-forge -c defaults rapids=0.13 python=3.7 
+    ${common}
+    #conda install pytorch -c pytorch cudatoolkit=10.1 --override-channels && conda clean -ya
 fi
 if [[ -d "/usr/local/cuda-10.1" ]]
 then
-    conda install -c rapidsai-nightly -c nvidia -c conda-forge -c defaults rapids=0.13 python=3.7 cudatoolkit=10.1
+    ${common} # cudatoolkit=10.1
 fi
 if [[ -d "/usr/local/cuda-10.2" ]]
 then
-    conda install -c rapidsai-nightly -c nvidia -c conda-forge -c defaults rapids=0.13 python=3.7 cudatoolkit=10.2
+    ${common} # cudatoolkit=10.2
 fi
 
 conda clean -ya
