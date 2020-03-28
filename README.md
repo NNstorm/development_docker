@@ -43,10 +43,6 @@ Supported CUDA versions: `10.0`, `10.1`, `10.2` in all images, `latest` is assoc
 [DockerHUB link](https://hub.docker.com/repository/docker/modellingmind/cuda-cudnn-opengl-userlayer)
 
 
-### `modellingmind/steam-games`
-[DockerHUB link](https://hub.docker.com/repository/docker/modellingmind/cuda-steam-gaming)
-
-
 ### `modellingmind/gpu-dev-pycharm`
 [DockerHUB link](https://hub.docker.com/repository/docker/modellingmind/gpu-dev-pycharm)
 
