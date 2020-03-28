@@ -16,7 +16,6 @@ mkl-include
 notebook
 numpy
 onnx
-opencv
 pandas
 plotly
 pytorch
