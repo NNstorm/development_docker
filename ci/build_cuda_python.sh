@@ -10,7 +10,7 @@ if [[ -z "${base_image}" ]]; then
 fi
 
 if [[ -z "${cuda_version}" ]]; then
-    cuda_version="10.1"
+    cuda_version="10.2"
 fi
 
 if [[ -z "${target_image}" ]]; then
