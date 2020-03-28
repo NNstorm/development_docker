@@ -52,15 +52,12 @@ stages:
             displayName: "Build cuda opengl docker"
           - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
             displayName: "Build cuda-cpp docker"
-          # - script: cd ci && ./build_cuda_python.sh ubuntu:18.04 $(dockerhub_org)/cuda-python:$(tag) $(cuda)
-          #   displayName: "Build cuda-python docker"
 
           - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
             displayName: "Docker login"
           - script: |
               docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
               docker push $(dockerhub_org)/cuda-cpp:$(tag)
-              # docker push $(dockerhub_org)/cuda-python:$(tag)
               docker system prune -a
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
@@ -81,18 +78,12 @@ stages:
             displayName: "Build cuda opengl docker"
           - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
             displayName: "Build cuda-cpp docker"
-          # - script: cd ci && ./build_cuda_python.sh ubuntu:18.04 $(dockerhub_org)/cuda-python:$(tag) $(cuda)
-          #   displayName: "Build cuda-python docker"
 
           - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
             displayName: "Docker login"
           - script: |
               docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
               docker push $(dockerhub_org)/cuda-cpp:$(tag)
-              # docker push $(dockerhub_org)/cuda-python:$(tag)
-              # CUDA 10.1 is the last version supported by PyTorch GPU, to be changed later
-              # docker tag  $(dockerhub_org)/cuda-python:$(tag) $(dockerhub_org)/cuda-python:latest
-              # docker push $(dockerhub_org)/cuda-python:latest
               docker system prune -a
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
@@ -113,16 +104,12 @@ stages:
             displayName: "Build cuda opengl docker"
           - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
             displayName: "Build cuda-cpp docker"
-          # Pytorch GPU does not support cuda 10.2 now, installing only pytorch CPU
-          # - script: cd ci && ./build_cuda_python.sh ubuntu:18.04 $(dockerhub_org)/cuda-python:$(tag) $(cuda)
-          #   displayName: "Build cuda-python docker"
 
           - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
             displayName: "Docker login"
           - script: |
               docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
               docker push $(dockerhub_org)/cuda-cpp:$(tag)
-              # docker push $(dockerhub_org)/cuda-python:$(tag)
               docker tag  $(dockerhub_org)/cuda-cudnn-opengl:$(tag)  $(dockerhub_org)/cuda-cudnn-opengl:latest
               docker push $(dockerhub_org)/cuda-cudnn-opengl:latest
               docker tag $(dockerhub_org)/cuda-cpp:$(tag) $(dockerhub_org)/cuda-cpp:latest
