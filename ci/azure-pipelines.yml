@@ -58,7 +58,6 @@ stages:
           - script: |
               docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
               docker push $(dockerhub_org)/cuda-cpp:$(tag)
-              docker system prune -a
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - stage: Build_CUDA_10_1
@@ -84,7 +83,6 @@ stages:
           - script: |
               docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
               docker push $(dockerhub_org)/cuda-cpp:$(tag)
-              docker system prune -a
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - stage: Build_CUDA_10_2
@@ -114,7 +112,6 @@ stages:
               docker push $(dockerhub_org)/cuda-cudnn-opengl:latest
               docker tag $(dockerhub_org)/cuda-cpp:$(tag) $(dockerhub_org)/cuda-cpp:latest
               docker push $(dockerhub_org)/cuda-cpp:latest
-              docker system prune -a
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - stage: TestContainers
