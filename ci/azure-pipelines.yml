@@ -17,7 +17,7 @@ pool:
 variables:
   - group: secrets
   - name: dockerhub_org
-    value: modellingmind
+    value: xmindai
   - name: ubuntu
     value: ubuntu18.04
   - name: azure_dtr
@@ -40,6 +40,7 @@ stages:
       - DockerDependencyTest
     jobs:
       - job: CUDA10
+        timeoutInMinutes: 120
         displayName: "Build and publish Ubuntu 18.04 CUDA 10.0 CUDNN 7 containers"
         variables:
           cuda: 10.0
@@ -49,17 +50,15 @@ stages:
         steps:
           - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
             displayName: "Build cuda opengl docker"
-          - script: cd user-layer && ./build.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag)
-            displayName: "Build user layer docker"
-          - script: cd gpu-dev-pycharm && ./build.sh $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag) $(dockerhub_org)/gpu-dev-pycharm:$(tag)
-            displayName: "Build development docker"
+          - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
+            displayName: "Build cuda-cpp docker"
 
           - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
             displayName: "Docker login"
           - script: |
               docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
-              docker push $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag)
-              docker push $(dockerhub_org)/gpu-dev-pycharm:$(tag)
+              docker push $(dockerhub_org)/cuda-cpp:$(tag)
+              docker system prune -a
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - stage: Build_CUDA_10_1
@@ -67,6 +66,7 @@ stages:
       - DockerDependencyTest
     jobs:
       - job: CUDA101
+        timeoutInMinutes: 120
         displayName: "Build and publish Ubuntu 18.04 CUDA 10.1 CUDNN 7 containers"
         variables:
           cuda: 10.1
@@ -76,17 +76,15 @@ stages:
         steps:
           - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
             displayName: "Build cuda opengl docker"
-          - script: cd user-layer && ./build.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag)
-            displayName: "Build user layer docker"
-          - script: cd gpu-dev-pycharm && ./build.sh $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag) $(dockerhub_org)/gpu-dev-pycharm:$(tag)
-            displayName: "Build development docker"
+          - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
+            displayName: "Build cuda-cpp docker"
 
           - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
             displayName: "Docker login"
           - script: |
               docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
-              docker push $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag)
-              docker push $(dockerhub_org)/gpu-dev-pycharm:$(tag)
+              docker push $(dockerhub_org)/cuda-cpp:$(tag)
+              docker system prune -a
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - stage: Build_CUDA_10_2
@@ -94,6 +92,7 @@ stages:
       - DockerDependencyTest
     jobs:
       - job: CUDA102
+        timeoutInMinutes: 120
         displayName: "Build and publish Ubuntu 18.04 CUDA 10.2 CUDNN 7 containers"
         variables:
           cuda: 10.2
@@ -103,30 +102,20 @@ stages:
         steps:
           - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
             displayName: "Build cuda opengl docker"
-          - script: cd user-layer && ./build.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag)
-            displayName: "Build user layer docker"
-          - script: cd gpu-dev-pycharm && ./build.sh $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag) $(dockerhub_org)/gpu-dev-pycharm:$(tag)
-            displayName: "Build development docker"
+          - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
+            displayName: "Build cuda-cpp docker"
 
           - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
             displayName: "Docker login"
           - script: |
               docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
-              docker push $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag)
-              docker push $(dockerhub_org)/gpu-dev-pycharm:$(tag)
-            displayName: "Push all containers"
-            condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-
-          - script: |
-              docker tag $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cudnn-opengl:latest
-              docker tag $(dockerhub_org)/cuda-cudnn-opengl-userlayer:$(tag) $(dockerhub_org)/cuda-cudnn-opengl-userlayer:latest
-              docker tag $(dockerhub_org)/gpu-dev-pycharm:$(tag) $(dockerhub_org)/gpu-dev-pycharm:latest
-            displayName: "Mark CUDA 10.2 images as latest"
-          - script: |
+              docker push $(dockerhub_org)/cuda-cpp:$(tag)
+              docker tag  $(dockerhub_org)/cuda-cudnn-opengl:$(tag)  $(dockerhub_org)/cuda-cudnn-opengl:latest
               docker push $(dockerhub_org)/cuda-cudnn-opengl:latest
-              docker push $(dockerhub_org)/cuda-cudnn-opengl-userlayer:latest
-              docker push $(dockerhub_org)/gpu-dev-pycharm:latest
-            displayName: "Push latest tags for all images"
+              docker tag $(dockerhub_org)/cuda-cpp:$(tag) $(dockerhub_org)/cuda-cpp:latest
+              docker push $(dockerhub_org)/cuda-cpp:latest
+              docker system prune -a
+            displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - stage: TestContainers
     dependsOn:
