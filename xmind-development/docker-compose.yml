@@ -1,8 +1,8 @@
-version: '3.7'
+version: "3.7"
 
 services:
   dev:
-    image: modellingmind/gpu-dev-pycharm
+    image: xmindai/cuda-python
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:ro
       - $HOME:/home/$USER
