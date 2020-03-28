@@ -30,4 +30,3 @@ tensorboard
 tensorboardX
 tensorflow-gpu
 tqdm
-typing

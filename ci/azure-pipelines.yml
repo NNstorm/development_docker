@@ -50,10 +50,18 @@ stages:
         steps:
           - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
             displayName: "Build cuda opengl docker"
+          - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
+            displayName: "Build cuda-cpp docker"
+          - script: cd ci && ./build_cuda_python.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-python:$(tag) $(cuda)
+            displayName: "Build cuda-python docker"
 
           - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
             displayName: "Docker login"
-          - script: docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
+          - script: |
+              docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
+              docker push $(dockerhub_org)/cuda-cpp:$(tag)
+              docker push $(dockerhub_org)/cuda-python:$(tag)
+              docker system prune -a
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - stage: Build_CUDA_10_1
@@ -71,10 +79,21 @@ stages:
         steps:
           - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
             displayName: "Build cuda opengl docker"
+          - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
+            displayName: "Build cuda-cpp docker"
+          - script: cd ci && ./build_cuda_python.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-python:$(tag) $(cuda)
+            displayName: "Build cuda-python docker"
 
           - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
             displayName: "Docker login"
-          - script: docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
+          - script: |
+              docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
+              docker push $(dockerhub_org)/cuda-cpp:$(tag)
+              docker push $(dockerhub_org)/cuda-python:$(tag)
+              # CUDA 10.1 is the last version supported by PyTorch, to be changed later
+              docker tag  $(dockerhub_org)/cuda-python:$(tag) $(dockerhub_org)/cuda-python:latest
+              docker push $(dockerhub_org)/cuda-python:latest
+              docker system prune -a
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - stage: Build_CUDA_10_2
@@ -92,20 +111,24 @@ stages:
         steps:
           - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
             displayName: "Build cuda opengl docker"
+          - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
+            displayName: "Build cuda-cpp docker"
+          # Pytorch does not support cuda 10.2 now...
+          # - script: cd ci && ./build_cuda_python.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-python:$(tag) $(cuda)
+          #   displayName: "Build cuda-python docker"
 
           - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
             displayName: "Docker login"
           - script: |
               docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
-            displayName: "Push all containers"
-            condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-
-          - script: |
-              docker tag $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cudnn-opengl:latest
-            displayName: "Mark CUDA 10.2 images as latest"
-          - script: |
+              docker push $(dockerhub_org)/cuda-cpp:$(tag)
+              # docker push $(dockerhub_org)/cuda-python:$(tag)
+              docker tag  $(dockerhub_org)/cuda-cudnn-opengl:$(tag)  $(dockerhub_org)/cuda-cudnn-opengl:latest
               docker push $(dockerhub_org)/cuda-cudnn-opengl:latest
-            displayName: "Push latest tags for all images"
+              docker tag $(dockerhub_org)/cuda-cpp:$(tag) $(dockerhub_org)/cuda-cpp:latest
+              docker push $(dockerhub_org)/cuda-cpp:latest
+              docker system prune -a
+            displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - stage: TestContainers
     dependsOn:
