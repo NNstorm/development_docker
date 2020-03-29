@@ -74,7 +74,7 @@ stages:
         steps:
           - script: az login --service-principal -u $(acr-automation-id) --password $(acr-automation-password) --tenant $(acr-automation-tenant)
             displayName: "Login to Azure cloud CLI"
-          - script: az acr task run -n python-cuda-10-0 -r xmind --resource-group MindRSG
+          - script: az acr task run --verbose --name cuda-python-10-0 --registry xmind --resource-group MindRSG
             displayName: "Build CUDA python container"
         condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   # - stage: Build_CUDA_10_1
