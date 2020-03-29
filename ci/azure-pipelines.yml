@@ -44,7 +44,6 @@ stages:
       - DockerDependencyTest
     jobs:
       - job: CUDA10
-        timeoutInMinutes: 120
         displayName: "Build and publish Ubuntu 18.04 CUDA 10.0 CUDNN 7 containers"
         variables:
           cuda: 10.0
@@ -70,7 +69,10 @@ stages:
     jobs:
       - job: AZ_ACR_Build
         steps:
+          - script: az login --service-principal -u $(acr-automation-id) --password $(acr-automation-password) --tenant $(acr-automation-tenant)
+            displayName: "Login to Azure cloud CLI"
           - script: az acr task run -n python-cuda-10-0 -r xmind
+            displayName: "Build CUDA python container"
         condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   # - stage: Build_CUDA_10_1
   #   dependsOn:
