@@ -131,22 +131,23 @@ stages:
   #             docker push $(dockerhub_org)/cuda-cpp:latest
   #           displayName: "Push all containers"
   #           condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-  - stage: TestContainers
+  - stage: CleanAzureCR
     dependsOn:
       - Build_CUDA_10_Python
       # - Build_CUDA_10_1
       # - Build_CUDA_10_2
     jobs:
-      - job: Unittest
+      - job: CleanRegistry
         steps:
-          - checkout: self
-          - script: echo "please write tests for the containers..."
-
-  - stage: PublishToAzure
+          - script: az login --service-principal -u $(acr-automation-id) --password $(acr-automation-password) --tenant $(acr-automation-tenant)
+            displayName: "Login to Azure cloud CLI"
+          - script: az acr run --cmd "acr purge --untagged --filter='cuda-cpp:xxx' --filter='cuda-cudnn-opengl:xxx' --filter='cuda-python:xxx' --filter='cuda-python-test:xxx' --ago=0" --registry xmind /dev/null
+            displayName: "Clean all untagged containers in registry"
+  - stage: PublishToDockerHub
     dependsOn:
-      - TestContainers
+      - CleanAzureCR
     jobs:
-      - job: Unittest
+      - job: Deploy
         steps:
           - checkout: self
-          - script: echo "Internal publishing for faster deployment"
+          - script: echo "Publish openly available containers"
