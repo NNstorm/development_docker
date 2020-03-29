@@ -51,16 +51,18 @@ stages:
           base_tag: $(cuda)-$(cudnn)-devel-$(ubuntu)
           tag: $(ubuntu)-$(cuda)-$(cudnn)
         steps:
-          - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
+          - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(azure_dtr)/cuda-cudnn-opengl:$(tag)
             displayName: "Build cuda opengl docker"
-          - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
+          - script: cd ci && ./build_cuda_cpp.sh $(azure_dtr)/cuda-cudnn-opengl:$(tag) $(azure_dtr)/cuda-cpp:$(tag)
             displayName: "Build cuda-cpp docker"
 
-          - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
+          - script: |
+              echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
+              echo "$(azure-container-registry-password)" | docker login -u $(azure-container-registry-user) --password-stdin $(azure_dtr)
             displayName: "Docker login"
           - script: |
-              docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
-              docker push $(dockerhub_org)/cuda-cpp:$(tag)
+              docker push $(azure_dtr)/cuda-cudnn-opengl:$(tag)
+              docker push $(azure_dtr)/cuda-cpp:$(tag)
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - stage: Build_CUDA_10_Python
@@ -68,10 +70,11 @@ stages:
       - Build_CUDA_10
     jobs:
       - job: AZ_ACR_Build
+        displayName: "Build CUDA python container with Azure CR build system"
         steps:
           - script: az login --service-principal -u $(acr-automation-id) --password $(acr-automation-password) --tenant $(acr-automation-tenant)
             displayName: "Login to Azure cloud CLI"
-          - script: az acr task run -n python-cuda-10-0 -r xmind
+          - script: az acr task run -n python-cuda-10-0 -r xmind --resource-group MindRSG
             displayName: "Build CUDA python container"
         condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   # - stage: Build_CUDA_10_1
