@@ -149,5 +149,7 @@ stages:
     jobs:
       - job: Deploy
         steps:
-          - checkout: self
-          - script: echo "Publish openly available containers"
+          - script: az login --service-principal -u $(acr-automation-id) --password $(acr-automation-password) --tenant $(acr-automation-tenant)
+            displayName: "Login to Azure cloud CLI"
+          - script: ci/deploy_to_dockerhub.sh $(dockerhub-user) $(dockerhub-token) cuda-cudnn-opengl $(ubuntu)-10.0-cudnn7
+        condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
