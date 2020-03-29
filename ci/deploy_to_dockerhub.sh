@@ -12,7 +12,7 @@ dockerhub_org="xmindai"
 
 get="docker pull ${azure_registry}/${image}:${tag}"
 login="echo ${hub_pass} | docker login -u ${hub_user} --password-stdin"
-tag="docker tag ${azure_registry}/${image}:${tag} ${dockerhub_org}/${image}:${tag}"
+dtag="docker tag ${azure_registry}/${image}:${tag} ${dockerhub_org}/${image}:${tag}"
 push="docker push ${dockerhub_org}/${image}:${tag}"
 
-az acr run --cmd "${get} && ${login} && ${tag} && ${push}" --registry xmind /dev/null   #--no-wait
+az acr run --cmd "${get} && ${login} && ${dtag} && ${push}" --no-wait --registry xmind /dev/null
