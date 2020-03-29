@@ -60,65 +60,73 @@ stages:
               docker push $(dockerhub_org)/cuda-cpp:$(tag)
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-  - stage: Build_CUDA_10_1
-    dependsOn:
-      - DockerDependencyTest
-    jobs:
-      - job: CUDA101
-        timeoutInMinutes: 120
-        displayName: "Build and publish Ubuntu 18.04 CUDA 10.1 CUDNN 7 containers"
-        variables:
-          cuda: 10.1
-          cudnn: cudnn7
-          base_tag: $(cuda)-$(cudnn)-devel-$(ubuntu)
-          tag: $(ubuntu)-$(cuda)-$(cudnn)
-        steps:
-          - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
-            displayName: "Build cuda opengl docker"
-          - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
-            displayName: "Build cuda-cpp docker"
-
-          - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
-            displayName: "Docker login"
-          - script: |
-              docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
-              docker push $(dockerhub_org)/cuda-cpp:$(tag)
-            displayName: "Push all containers"
-            condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-  - stage: Build_CUDA_10_2
-    dependsOn:
-      - DockerDependencyTest
-    jobs:
-      - job: CUDA102
-        timeoutInMinutes: 120
-        displayName: "Build and publish Ubuntu 18.04 CUDA 10.2 CUDNN 7 containers"
-        variables:
-          cuda: 10.2
-          cudnn: cudnn7
-          base_tag: $(cuda)-$(cudnn)-devel-$(ubuntu)
-          tag: $(ubuntu)-$(cuda)-$(cudnn)
-        steps:
-          - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
-            displayName: "Build cuda opengl docker"
-          - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
-            displayName: "Build cuda-cpp docker"
-
-          - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
-            displayName: "Docker login"
-          - script: |
-              docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
-              docker push $(dockerhub_org)/cuda-cpp:$(tag)
-              docker tag  $(dockerhub_org)/cuda-cudnn-opengl:$(tag)  $(dockerhub_org)/cuda-cudnn-opengl:latest
-              docker push $(dockerhub_org)/cuda-cudnn-opengl:latest
-              docker tag $(dockerhub_org)/cuda-cpp:$(tag) $(dockerhub_org)/cuda-cpp:latest
-              docker push $(dockerhub_org)/cuda-cpp:latest
-            displayName: "Push all containers"
-            condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-  - stage: TestContainers
+  - stage: Build_CUDA_10_Python
     dependsOn:
       - Build_CUDA_10
-      - Build_CUDA_10_1
-      - Build_CUDA_10_2
+    jobs:
+      - job: AZ_ACR_Build
+        steps:
+          - script: az acr task run -n python-cuda-10-0 -r xmind
+        condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+  # - stage: Build_CUDA_10_1
+  #   dependsOn:
+  #     - DockerDependencyTest
+  #   jobs:
+  #     - job: CUDA101
+  #       timeoutInMinutes: 120
+  #       displayName: "Build and publish Ubuntu 18.04 CUDA 10.1 CUDNN 7 containers"
+  #       variables:
+  #         cuda: 10.1
+  #         cudnn: cudnn7
+  #         base_tag: $(cuda)-$(cudnn)-devel-$(ubuntu)
+  #         tag: $(ubuntu)-$(cuda)-$(cudnn)
+  #       steps:
+  #         - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
+  #           displayName: "Build cuda opengl docker"
+  #         - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
+  #           displayName: "Build cuda-cpp docker"
+
+  #         - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
+  #           displayName: "Docker login"
+  #         - script: |
+  #             docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
+  #             docker push $(dockerhub_org)/cuda-cpp:$(tag)
+  #           displayName: "Push all containers"
+  #           condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+  # - stage: Build_CUDA_10_2
+  #   dependsOn:
+  #     - DockerDependencyTest
+  #   jobs:
+  #     - job: CUDA102
+  #       timeoutInMinutes: 120
+  #       displayName: "Build and publish Ubuntu 18.04 CUDA 10.2 CUDNN 7 containers"
+  #       variables:
+  #         cuda: 10.2
+  #         cudnn: cudnn7
+  #         base_tag: $(cuda)-$(cudnn)-devel-$(ubuntu)
+  #         tag: $(ubuntu)-$(cuda)-$(cudnn)
+  #       steps:
+  #         - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
+  #           displayName: "Build cuda opengl docker"
+  #         - script: cd ci && ./build_cuda_cpp.sh $(dockerhub_org)/cuda-cudnn-opengl:$(tag) $(dockerhub_org)/cuda-cpp:$(tag)
+  #           displayName: "Build cuda-cpp docker"
+
+  #         - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
+  #           displayName: "Docker login"
+  #         - script: |
+  #             docker push $(dockerhub_org)/cuda-cudnn-opengl:$(tag)
+  #             docker push $(dockerhub_org)/cuda-cpp:$(tag)
+  #             docker tag  $(dockerhub_org)/cuda-cudnn-opengl:$(tag)  $(dockerhub_org)/cuda-cudnn-opengl:latest
+  #             docker push $(dockerhub_org)/cuda-cudnn-opengl:latest
+  #             docker tag $(dockerhub_org)/cuda-cpp:$(tag) $(dockerhub_org)/cuda-cpp:latest
+  #             docker push $(dockerhub_org)/cuda-cpp:latest
+  #           displayName: "Push all containers"
+  #           condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+  - stage: TestContainers
+    dependsOn:
+      - Build_CUDA_10_Python
+      # - Build_CUDA_10_1
+      # - Build_CUDA_10_2
     jobs:
       - job: Unittest
         steps:
