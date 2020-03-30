@@ -15,4 +15,4 @@ login="echo ${hub_pass} | docker login -u ${hub_user} --password-stdin"
 dtag="docker tag ${azure_registry}/${image}:${tag} ${dockerhub_org}/${image}:${tag}"
 push="docker push ${dockerhub_org}/${image}:${tag}"
 
-az acr run --cmd "${get} && ${login} && ${dtag} && ${push}" --registry xmind /dev/null
+az acr run --cmd "${get} && ${login} && ${dtag} && ${push}" --timeout 3600 --no-wait --registry xmind /dev/null
