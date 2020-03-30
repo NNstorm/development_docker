@@ -32,31 +32,31 @@ Set Nvidia as default container runtime for Docker in `/etc/docker/daemon.json`:
 
 
 ## Available Docker images
-Supported CUDA versions: `10.0`, `10.1`, `10.2` in all images, `latest` is associated with `10.2`.
+Supported CUDA versions: `10.0`, `10.1`, `10.2` in all images, `latest` tag is not used as a best practice implementation.
 
 
-### `modellingmind/nvidia-cuda-cudnn-opengl` 
+### `xmindai/cuda-cudnn-opengl` 
 [DockerHUB link](https://hub.docker.com/repository/docker/modellingmind/cuda-cudnn-opengl)
 
 
-### `modellingmind/user-layer`
+### `xmindai/cuda-cpp`
 [DockerHUB link](https://hub.docker.com/repository/docker/modellingmind/cuda-cudnn-opengl-userlayer)
 
 
-### `modellingmind/gpu-dev-pycharm`
+### `xmindai/cuda-python`
 [DockerHUB link](https://hub.docker.com/repository/docker/modellingmind/gpu-dev-pycharm)
 
 Start interactive session:
 ```bash
-docker-compose -f gpu-dev-pycharm/docker-compose.yml run dev
+docker-compose -f xmind-development/docker-compose.yml run dev
 ```
 
 Start ssh service (background):
 ```bash
-docker-compose -f gpu-dev-pycharm/docker-compose.yml up -d ssh
+docker-compose -f xmind-development/docker-compose.yml up -d ssh
 ```
 
 Kill ssh service:
 ```bash
-docker-compose -f gpu-dev-pycharm/docker-compose.yml down ssh
+docker-compose -f xmind-development/docker-compose.yml down ssh
 ```
