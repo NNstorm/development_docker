@@ -19,7 +19,7 @@ fi
 
 cd /tmp
 wget --no-check-certificate https://mindstore0.blob.core.windows.net/blob0/nv-tensorrt-repo-ubuntu1804-${tag}_1-1_amd64.deb
-dpkg -i nv-tensorrt-repo-ubuntu1804-cuda10.0-trt7.0.0.11-ga-20191216_1-1_amd64.deb
+dpkg -i nv-tensorrt-repo-ubuntu1804-${tag}_1-1_amd64.deb
 apt-key add /var/nv-tensorrt-repo-${tag}/7fa2af80.pub
 
 dpkg -i /var/nv-tensorrt-repo-${tag}/*.deb
