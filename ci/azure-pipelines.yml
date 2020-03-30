@@ -44,12 +44,60 @@ stages:
       - DockerDependencyTest
     jobs:
       - job: CUDA10
-        displayName: "Build and publish Ubuntu 18.04 CUDA 10.0 CUDNN 7 containers"
         variables:
           cuda: 10.0
           cudnn: cudnn7
           base_tag: $(cuda)-$(cudnn)-devel-$(ubuntu)
           tag: $(ubuntu)-$(cuda)-$(cudnn)
+        displayName: "Build and publish Ubuntu 18.04 CUDA $(tag) containers"
+        steps:
+          - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(azure_dtr)/cuda-cudnn-opengl:$(tag)
+            displayName: "Build cuda opengl docker"
+          - script: cd ci && ./build_cuda_cpp.sh $(azure_dtr)/cuda-cudnn-opengl:$(tag) $(azure_dtr)/cuda-cpp:$(tag) $(cuda)
+            displayName: "Build cuda-cpp docker"
+
+          - script: echo "$(azure-container-registry-password)" | docker login -u $(azure-container-registry-user) --password-stdin $(azure_dtr)
+            displayName: "Docker login"
+          - script: |
+              docker push $(azure_dtr)/cuda-cudnn-opengl:$(tag)
+              docker push $(azure_dtr)/cuda-cpp:$(tag)
+            displayName: "Push all containers"
+            condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+  - stage: Build_CUDA_10_1
+    dependsOn:
+      - DockerDependencyTest
+    jobs:
+      - job: CUDA10
+        variables:
+          cuda: 10.1
+          cudnn: cudnn7
+          base_tag: $(cuda)-$(cudnn)-devel-$(ubuntu)
+          tag: $(ubuntu)-$(cuda)-$(cudnn)
+        displayName: "Build and publish Ubuntu 18.04 CUDA $(tag) containers"
+        steps:
+          - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(azure_dtr)/cuda-cudnn-opengl:$(tag)
+            displayName: "Build cuda opengl docker"
+          - script: cd ci && ./build_cuda_cpp.sh $(azure_dtr)/cuda-cudnn-opengl:$(tag) $(azure_dtr)/cuda-cpp:$(tag) $(cuda)
+            displayName: "Build cuda-cpp docker"
+
+          - script: echo "$(azure-container-registry-password)" | docker login -u $(azure-container-registry-user) --password-stdin $(azure_dtr)
+            displayName: "Docker login"
+          - script: |
+              docker push $(azure_dtr)/cuda-cudnn-opengl:$(tag)
+              docker push $(azure_dtr)/cuda-cpp:$(tag)
+            displayName: "Push all containers"
+            condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+  - stage: Build_CUDA_10_2
+    dependsOn:
+      - DockerDependencyTest
+    jobs:
+      - job: CUDA10
+        variables:
+          cuda: 10.2
+          cudnn: cudnn7
+          base_tag: $(cuda)-$(cudnn)-devel-$(ubuntu)
+          tag: $(ubuntu)-$(cuda)-$(cudnn)
+        displayName: "Build and publish Ubuntu 18.04 CUDA $(tag) containers"
         steps:
           - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(azure_dtr)/cuda-cudnn-opengl:$(tag)
             displayName: "Build cuda opengl docker"
@@ -75,11 +123,35 @@ stages:
           - script: az acr task run --verbose --name cuda-python-10-0 --registry xmind --resource-group MindRSG
             displayName: "Build CUDA python container"
         condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+  - stage: Build_CUDA_10_1_Python
+    dependsOn:
+      - Build_CUDA_10_1
+    jobs:
+      - job: AZ_ACR_Build
+        displayName: "Build CUDA python container with Azure CR build system"
+        steps:
+          - script: az login --service-principal -u $(acr-automation-id) --password $(acr-automation-password) --tenant $(acr-automation-tenant)
+            displayName: "Login to Azure cloud CLI"
+          - script: az acr task run --verbose --name cuda-python-10-1 --registry xmind --resource-group MindRSG
+            displayName: "Build CUDA python container"
+        condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+  - stage: Build_CUDA_10_2_Python
+    dependsOn:
+      - Build_CUDA_10_2
+    jobs:
+      - job: AZ_ACR_Build
+        displayName: "Build CUDA python container with Azure CR build system"
+        steps:
+          - script: az login --service-principal -u $(acr-automation-id) --password $(acr-automation-password) --tenant $(acr-automation-tenant)
+            displayName: "Login to Azure cloud CLI"
+          - script: az acr task run --verbose --name cuda-python-10-2 --registry xmind --resource-group MindRSG
+            displayName: "Build CUDA python container"
+        condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
   - stage: CleanAzureCR
     dependsOn:
       - Build_CUDA_10_Python
-      # - Build_CUDA_10_1
-      # - Build_CUDA_10_2
+      - Build_CUDA_10_1_Python
+      - Build_CUDA_10_2_Python
     jobs:
       - job: CleanRegistry
         steps:
@@ -98,4 +170,10 @@ stages:
           - script: ci/deploy_to_dockerhub.sh $(dockerhub-user) $(dockerhub-token) cuda-cudnn-opengl $(ubuntu)-10.0-cudnn7
           - script: ci/deploy_to_dockerhub.sh $(dockerhub-user) $(dockerhub-token) cuda-cpp $(ubuntu)-10.0-cudnn7
           - script: ci/deploy_to_dockerhub.sh $(dockerhub-user) $(dockerhub-token) cuda-python $(ubuntu)-10.0-cudnn7
+          - script: ci/deploy_to_dockerhub.sh $(dockerhub-user) $(dockerhub-token) cuda-cudnn-opengl $(ubuntu)-10.1-cudnn7
+          - script: ci/deploy_to_dockerhub.sh $(dockerhub-user) $(dockerhub-token) cuda-cpp $(ubuntu)-10.1-cudnn7
+          - script: ci/deploy_to_dockerhub.sh $(dockerhub-user) $(dockerhub-token) cuda-python $(ubuntu)-10.1-cudnn7
+          - script: ci/deploy_to_dockerhub.sh $(dockerhub-user) $(dockerhub-token) cuda-cudnn-opengl $(ubuntu)-10.2-cudnn7
+          - script: ci/deploy_to_dockerhub.sh $(dockerhub-user) $(dockerhub-token) cuda-cpp $(ubuntu)-10.2-cudnn7
+          - script: ci/deploy_to_dockerhub.sh $(dockerhub-user) $(dockerhub-token) cuda-python $(ubuntu)-10.2-cudnn7
         condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
