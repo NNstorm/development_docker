@@ -53,7 +53,7 @@ stages:
         steps:
           - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(azure_dtr)/cuda-cudnn-opengl:$(tag)
             displayName: "Build cuda opengl docker"
-          - script: cd ci && ./build_cuda_cpp.sh $(azure_dtr)/cuda-cudnn-opengl:$(tag) $(azure_dtr)/cuda-cpp:$(tag)
+          - script: cd ci && ./build_cuda_cpp.sh $(azure_dtr)/cuda-cudnn-opengl:$(tag) $(azure_dtr)/cuda-cpp:$(tag) $(cuda)
             displayName: "Build cuda-cpp docker"
 
           - script: echo "$(azure-container-registry-password)" | docker login -u $(azure-container-registry-user) --password-stdin $(azure_dtr)
