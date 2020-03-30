@@ -115,7 +115,7 @@ stages:
     dependsOn:
       - Build_CUDA_10
     jobs:
-      - job: AZ_ACR_Build
+      - job: AZ_ACR_Build_10_0
         displayName: "Build CUDA python container with Azure CR build system"
         steps:
           - script: az login --service-principal -u $(acr-automation-id) --password $(acr-automation-password) --tenant $(acr-automation-tenant)
@@ -127,7 +127,7 @@ stages:
     dependsOn:
       - Build_CUDA_10_1
     jobs:
-      - job: AZ_ACR_Build
+      - job: AZ_ACR_Build_10_1
         displayName: "Build CUDA python container with Azure CR build system"
         steps:
           - script: az login --service-principal -u $(acr-automation-id) --password $(acr-automation-password) --tenant $(acr-automation-tenant)
@@ -139,7 +139,7 @@ stages:
     dependsOn:
       - Build_CUDA_10_2
     jobs:
-      - job: AZ_ACR_Build
+      - job: AZ_ACR_Build_10_2
         displayName: "Build CUDA python container with Azure CR build system"
         steps:
           - script: az login --service-principal -u $(acr-automation-id) --password $(acr-automation-password) --tenant $(acr-automation-tenant)
