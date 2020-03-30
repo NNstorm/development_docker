@@ -37,14 +37,25 @@ Supported CUDA versions: `10.0`, `10.1`, `10.2` in all images, `latest` tag is n
 
 ### `xmindai/cuda-cudnn-opengl` 
 [DockerHUB link](https://hub.docker.com/repository/docker/modellingmind/cuda-cudnn-opengl)
-
+* CUDA-dev
+* CUDNN-dev
+* CUDA OpenGL-dev
 
 ### `xmindai/cuda-cpp`
 [DockerHUB link](https://hub.docker.com/repository/docker/modellingmind/cuda-cudnn-opengl-userlayer)
-
+Built on `xmindai/cuda-cudnn-opengl`
+* User layer - support for arbitrary user to log in
+* TensorRT development (in labels CUDA10.0 and CUDA10.2)
+* Development layer from folder `general-development`, supporting complete, graphical dev life-cycle in a single container
 
 ### `xmindai/cuda-python`
 [DockerHUB link](https://hub.docker.com/repository/docker/modellingmind/gpu-dev-pycharm)
+Built on `xmindai/cuda-cpp`
+Adds CUDA Python libs with Anaconda:
+* PyTorch - GPU (in CUDA 10.0 and CUDA 10.1, 10.2 is not yet supported)
+* Tensorflow - GPU
+* CUDA RAPIDS
+* Many more defined in `cuda-python-development/requirements.txt`
 
 Start interactive session:
 ```bash
