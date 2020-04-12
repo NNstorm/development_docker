@@ -1,5 +1,6 @@
 autopep8
 black
+ccxt
 cffi
 cmake
 cython
