@@ -31,14 +31,6 @@ stages:
         steps:
           - checkout: none
           - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
-      - job: TestLoginAzureRegistry
-        steps:
-          - checkout: none
-          - script: echo "$(azure-container-registry-password)" | docker login -u $(azure-container-registry-user) --password-stdin $(azure_dtr)
-      - job: TestLoginAzureCLI
-        steps:
-          - checkout: none
-          - script: az login --service-principal -u $(acr-automation-id) --password $(acr-automation-password) --tenant $(acr-automation-tenant)
   - stage: Build_CUDA_10
     dependsOn:
       - DockerDependencyTest

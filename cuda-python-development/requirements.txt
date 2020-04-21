@@ -13,12 +13,14 @@ jupyterlab
 matplotlib
 mkl
 mkl-include
+nose
 notebook
 numpy
 onnx
 pandas
 plotly
 pylint
+pytest
 pyyaml
 rapids=0.13
 requests

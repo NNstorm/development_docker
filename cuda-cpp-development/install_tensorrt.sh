@@ -28,4 +28,5 @@ dpkg --remove nv-tensorrt-repo-ubuntu1804-${tag}
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 rm -rf /tmp/*
+rm /etc/apt/sources.list.d/nv-tensorrt-*
 rm -rf /var/nv-tensorrt*

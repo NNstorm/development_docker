@@ -3,13 +3,16 @@ FROM $from
 
 # Install make and compilers
 RUN DEBIAN_FRONTEND=noninteractive apt update && \
+    DEBIAN_FRONTEND=noninteractive apt upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt install -y \
     autoconf automake bison build-essential byacc bzip2 ca-certificates ccache clang cmake cowsay curl dnsutils \
     emacs flake8 flex gcc gdb gdbserver git git-lfs htop inetutils-ping iproute2 less libcanberra-gtk-module \
     libfontconfig1 libfreetype6-dev libgtk2.0-0 libjpeg-dev libpng-dev libprotoc-dev libx11-6 libxext-dev \
     libxrender-dev libxtst-dev lldb llvm mesa-utils nano net-tools openssh-client openssh-server protobuf-compiler \
-    rsync sl sudo tcpdump telnet \
-    tmux traceroute tree valgrind vim wget xauth zsh  && \
+    rsync sl software-properties-common sudo tcpdump telnet \
+    tmux traceroute tree valgrind vim wget xauth zsh && \
+    add-apt-repository ppa:git-core/ppa -y && \
+    DEBIAN_FRONTEND=noninteractive apt install -y git && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
