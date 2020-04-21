@@ -18,7 +18,6 @@ numpy
 onnx
 pandas
 plotly
-pytorch
 pylint
 pyyaml
 rapids=0.13

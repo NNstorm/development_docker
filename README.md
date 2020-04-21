@@ -17,7 +17,7 @@ export HOST_GROUP=$(id -g -n)
 export UID=${UID}
 ```
 
-Set Nvidia as default container runtime for Docker in `/etc/docker/daemon.json`:
+Set Nvidia as default container runtime for Docker in `/etc/docker/daemon.json`, it is needed to run docker-compose:
 ```
 {
     "default-runtime": "nvidia",
@@ -59,7 +59,7 @@ Built on `xmindai/cuda-cudnn-opengl`
 
 Built on `xmindai/cuda-cpp`
 Adds CUDA Python libs with Anaconda:
-* PyTorch - GPU (in CUDA 10.0 and CUDA 10.1, 10.2 is not yet supported)
+* PyTorch - GPU 
 * Tensorflow - GPU
 * CUDA RAPIDS
 * Many more defined in `cuda-python-development/requirements.txt`
