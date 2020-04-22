@@ -5,8 +5,8 @@ pr:
     include:
       - master
 schedules:
-  - cron: "0 0 * * *"
-    displayName: Daily midnight build
+  - cron: "0 0 * * Sun"
+    displayName: Sunday midnight build
     branches:
       include:
         - master
@@ -112,7 +112,7 @@ stages:
       - Build_CUDA_10_0
     jobs:
       - job: AZ_ACR_Build_10_0_Deploy
-        displayName: "Build CUDA python container with Azure CR build system"
+        displayName: "Build, Deploy CUDA python container with Azure CR build system"
         steps:
           - task: AzureCLI@2
             inputs:
@@ -140,7 +140,7 @@ stages:
       - Build_CUDA_10_1
     jobs:
       - job: AZ_ACR_Build_10_1_Deploy
-        displayName: "Build CUDA python container with Azure CR build system"
+        displayName: "Build, Deploy CUDA python container with Azure CR build system"
         steps:
           - task: AzureCLI@2
             inputs:
@@ -168,7 +168,7 @@ stages:
       - Build_CUDA_10_2
     jobs:
       - job: AZ_ACR_Build_10_2_Deploy
-        displayName: "Build CUDA python container with Azure CR build system"
+        displayName: "Build, Deploy CUDA python container with Azure CR build system"
         steps:
           - task: AzureCLI@2
             inputs:
