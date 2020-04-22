@@ -1,7 +1,7 @@
 # Development Docker images
 Deep learning development tools using Docker
 
-[![Build Status](https://dev.azure.com/XMindAI/OpenXMind/_apis/build/status/XMindAI.development_docker?branchName=master)](https://dev.azure.com/XMindAI/OpenXMind/_build/latest?definitionId=6&branchName=master)
+[![Build Status](https://dev.azure.com/XMindAI/OpenXMind/_apis/build/status/xmind.ai%20-%20Docker%20Development?branchName=master)](https://dev.azure.com/XMindAI/OpenXMind/_build/latest?definitionId=6&branchName=master)
 
 ## Instructions
 
