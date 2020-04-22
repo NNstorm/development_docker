@@ -24,6 +24,10 @@ variables:
     value: xmind.azurecr.io
   - name: subscription
     value: MindModelSub
+  - name: acr_name
+    value: xmind
+  - name: acr_task_path
+    value: ci/acr_tasks
 
 stages:
   - stage: DockerDependencyTest
@@ -33,6 +37,7 @@ stages:
         steps:
           - checkout: none
           - script: echo "$(dockerhub-token)" | docker login -u $(dockerhub-user) --password-stdin
+          
   - stage: Build_CUDA_10_0
     dependsOn:
       - DockerDependencyTest
@@ -55,6 +60,7 @@ stages:
               docker push $(azure_dtr)/cuda-cpp:$(tag)
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+
   - stage: Build_CUDA_10_1
     dependsOn:
       - DockerDependencyTest
@@ -77,6 +83,7 @@ stages:
               docker push $(azure_dtr)/cuda-cpp:$(tag)
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+
   - stage: Build_CUDA_10_2
     dependsOn:
       - DockerDependencyTest
@@ -99,11 +106,12 @@ stages:
               docker push $(azure_dtr)/cuda-cpp:$(tag)
             displayName: "Push all containers"
             condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+
   - stage: Build_CUDA_10_0_Python
     dependsOn:
       - Build_CUDA_10_0
     jobs:
-      - job: AZ_ACR_Build_10_0
+      - job: AZ_ACR_Build_10_0_Deploy
         displayName: "Build CUDA python container with Azure CR build system"
         steps:
           - task: AzureCLI@2
@@ -111,30 +119,11 @@ stages:
               azureSubscription: $(subscription)
               scriptType: bash
               scriptLocation: inlineScript
-              inlineScript: az acr task run --verbose --name cuda-python-10-0 --registry xmind --resource-group MindRSG
-            displayName: "Build CUDA python container"
-        condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
-  - stage: Build_CUDA_10_1_Python
-    dependsOn:
-      - Build_CUDA_10_1
-    jobs:
-      - job: AZ_ACR_Build_10_1
-        displayName: "Build CUDA python container with Azure CR build system"
-        steps:
-          - task: AzureCLI@2
-            inputs:
-              azureSubscription: $(subscription)
-              scriptType: bash
-              scriptLocation: inlineScript
-              inlineScript: az acr task run --verbose --name cuda-python-10-1 --registry xmind --resource-group MindRSG
+              inlineScript: az acr run --timeout 3600 -r $(acr_name) . -f $(acr_task_path)/cuda_python_10_0_build_push.yaml
             displayName: "Build CUDA python container"
         condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
 
-  - stage: Build_CUDA_10_2_Python
-    dependsOn:
-      - Build_CUDA_10_2
-    jobs:
-      - job: AZ_ACR_Build_10_2
+      - job: AZ_ACR_Build_10_0_PR
         displayName: "Build CUDA python container with Azure CR build system"
         steps:
           - task: AzureCLI@2
@@ -142,14 +131,47 @@ stages:
               azureSubscription: $(subscription)
               scriptType: bash
               scriptLocation: inlineScript
-              inlineScript: az acr task run --verbose --name cuda-python-10-2 --registry xmind --resource-group MindRSG
+              inlineScript: az acr run --timeout 3600 -r $(acr_name) . -f $(acr_task_path)/cuda_python_10_0_build.yaml
             displayName: "Build CUDA python container"
-        condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+        condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+
+  # - stage: Build_CUDA_10_1_Python
+  #   dependsOn:
+  #     - Build_CUDA_10_1
+  #   jobs:
+  #     - job: AZ_ACR_Build_10_1
+  #       displayName: "Build CUDA python container with Azure CR build system"
+  #       steps:
+  #         - task: AzureCLI@2
+  #           inputs:
+  #             azureSubscription: $(subscription)
+  #             scriptType: bash
+  #             scriptLocation: inlineScript
+  #             inlineScript: az acr task run --verbose --name cuda-python-10-1 --registry xmind --resource-group MindRSG
+  #           displayName: "Build CUDA python container"
+  #       condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+
+  # - stage: Build_CUDA_10_2_Python
+  #   dependsOn:
+  #     - Build_CUDA_10_2
+  #   jobs:
+  #     - job: AZ_ACR_Build_10_2
+  #       displayName: "Build CUDA python container with Azure CR build system"
+  #       steps:
+  #         - task: AzureCLI@2
+  #           inputs:
+  #             azureSubscription: $(subscription)
+  #             scriptType: bash
+  #             scriptLocation: inlineScript
+  #             inlineScript: az acr task run --verbose --name cuda-python-10-2 --registry xmind --resource-group MindRSG
+  #           displayName: "Build CUDA python container"
+  #       condition: and(succeeded(), not(eq(variables['Build.Reason'], 'PullRequest')))
+
   - stage: CleanAzureCR
     dependsOn:
       - Build_CUDA_10_0_Python
-      - Build_CUDA_10_1_Python
-      - Build_CUDA_10_2_Python
+      # - Build_CUDA_10_1_Python
+      # - Build_CUDA_10_2_Python
     jobs:
       - job: CleanRegistry
         steps:

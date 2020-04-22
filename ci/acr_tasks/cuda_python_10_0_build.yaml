@@ -2,5 +2,5 @@
 version: v1.1.0
 stepTimeout: 1800
 steps:
-  - build: -t xmind.azurecr.io/cuda-python:ubuntu18.04-10.0-cudnn7 -f tools/dev_docker/Dockerfile --build-arg from=xmind.azurecr.io/cuda-python:ubuntu18.04-10.0-cudnn7 tools/dev_docker
+  - build: -t xmind.azurecr.io/cuda-python:ubuntu18.04-10.0-cudnn7 -f cuda-python-development/Dockerfile --build-arg from=xmind.azurecr.io/cuda-cpp:ubuntu18.04-10.0-cudnn7 --build-arg cuda=10.0 cuda-python-development
   
