@@ -1,0 +1,5 @@
+version: v1.1.0
+stepTimeout: 1800
+steps:
+  - build: -t xmind.azurecr.io/cuda-python:ubuntu18.04-10.2-cudnn7 -f cuda-python-development/Dockerfile --build-arg from=xmind.azurecr.io/cuda-cpp:ubuntu18.04-10.2-cudnn7 --build-arg cuda=10.2 cuda-python-development
+  - push: ["xmind.azurecr.io/cuda-python:ubuntu18.04-10.2-cudnn7"]

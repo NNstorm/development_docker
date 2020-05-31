@@ -1,0 +1,54 @@
+version: "3.7"
+
+services:
+  dev:
+    image: xmindai/cuda-python
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - $HOME:/home/$USER
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/sudoers:/etc/sudoers:ro
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - HOST_UID=$HOST_UID
+      - HOST_USER=$USER
+      - HOST_GID=$GID
+      - HOST_GROUP=$HOST_GROUP
+      - _JAVA_OPTIONS=-Duser.home=/home/$USER/
+    ipc: host
+    container_name: minddev
+    hostname: minddev
+
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp=unconfined
+    network_mode: host
+
+  ssh:
+    image: xmindai/cuda-python
+    volumes:
+      - $HOME:/home/$USER
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/sudoers:/etc/sudoers:ro
+    environment:
+      - HOST_UID=$HOST_UID
+      - HOST_USER=$USER
+      - HOST_GID=$GID
+      - HOST_GROUP=$HOST_GROUP
+      - _JAVA_OPTIONS=-Duser.home=/home/$USER/
+    ipc: host
+    hostname: minddev-ssh
+    container_name: minddev-ssh
+
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp=unconfined
+    entrypoint:
+      - /bin/bash
+      - -c
+      - /usr/sbin/sshd && /entrypoint.sh bash -c "while true; do sleep 2; done"
+    ports:
+      - 20022:20022
