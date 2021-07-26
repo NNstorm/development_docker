@@ -9,7 +9,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     emacs flake8 flex gcc gdb gdbserver git git-lfs htop inetutils-ping iproute2 less libcanberra-gtk-module \
     libfontconfig1 libfreetype6-dev libgtk2.0-0 libjpeg-dev libpng-dev libprotoc-dev libx11-6 libxext-dev \
     libxrender-dev libxtst-dev lldb llvm mesa-utils nano net-tools openssh-client openssh-server protobuf-compiler \
-    rsync sl software-properties-common sudo tcpdump telnet \
+    rsync sl software-properties-common sudo tcpdump telnet x11vnc xvfb \
     tmux traceroute tree valgrind vim wget xauth zsh && \
     add-apt-repository ppa:git-core/ppa -y && \
     DEBIAN_FRONTEND=noninteractive apt install -y git && \
