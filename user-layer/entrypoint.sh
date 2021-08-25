@@ -21,6 +21,6 @@ if [[ -z "${HOST_UID}" ]]; then
 fi
 
 groupadd --force ${HOST_GROUP} --gid ${HOST_GID}
-useradd -u ${HOST_UID} -g ${HOST_GID} -d /home/${HOST_USER} -s /bin/bash -M ${HOST_USER}
+useradd -u ${HOST_UID} -g ${HOST_GID} -d /home/${HOST_USER} -s /bin/zsh -M ${HOST_USER}
 
 su - ${HOST_USER} "$@"
