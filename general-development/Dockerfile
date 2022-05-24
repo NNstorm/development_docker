@@ -1,6 +1,14 @@
 ARG from
 FROM $from
 
+#Update Cuda GPG key
+ARG distro
+ARG arch
+
+RUN apt-key del 7fa2af80
+RUN wget https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/cuda-keyring_1.0-1_all.deb
+RUN dpkg -i cuda-keyring_1.0-1_all.deb
+
 # Install make and compilers
 RUN DEBIAN_FRONTEND=noninteractive apt update && \
     DEBIAN_FRONTEND=noninteractive apt upgrade -y && \
