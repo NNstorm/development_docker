@@ -4,6 +4,8 @@ repo_dir="${ci_dir}/.."
 base_image=$1
 target_image=$2
 cuda_version=$3
+distro=$4
+arch=$5
 
 if [[ -z "${base_image}" ]]; then
     base_image=" xmindai/cuda-cudnn-opengl:ubuntu18.04-10.0-cudnn7"  # xmindai/cuda-cudnn-opengl:ubuntu18.04-10.0-cudnn7
@@ -21,7 +23,7 @@ fi
 set -e
 
 cd "${repo_dir}/general-development"
-./build.sh ${base_image} temp-dev-img
+./build.sh ${base_image} temp-dev-img ${distro} ${arch}
 
 cd "${repo_dir}/user-layer"
 ./build.sh temp-dev-img temp-dev-user-img
