@@ -2,8 +2,9 @@
 
 base_image=$1
 target_image=$2
-distro=$3
-arch=$4
+
+tag=$(sed 's/.*:\(.*\)-.*/\1/' <<< "$base_image")
+distro=$(sed 's/\.//g' <<< "$tag")
 
 if [[ -z "${base_image}" ]]; then
     echo "No base image given" 1>&2
@@ -17,4 +18,4 @@ fi
 
 set -e
 
-docker build -t ${target_image} --build-arg from=${base_image} --build-arg distro=${distro} --build-arg arch=${arch} .
+docker build -t ${target_image} --build-arg from=${base_image} --build-arg distro=${distro} .
