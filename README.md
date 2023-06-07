@@ -35,10 +35,12 @@ Set Nvidia as default container runtime for Docker in `/etc/docker/daemon.json`,
 To make development portable and deployable on cloud, it is recommended to run the IDE inside the container. Legacy solution installed the IDE inside the container which resulted in large container sizes (moving around useless packages). Best practice is to mount your IDE inside the container (to be specified in the docker-compose file or docker run) and start them from the container. GUI access is granted on Intel, AMD and NVIDIA GPUs by default. This enables portable code and easier cooperation of teams.
 
 ## Available Docker images
-Supported CUDA versions: `10.0`, `10.1`, `10.2`, `11.5.1` in all images, `latest` tag is not used as a best practice implementation.
+
+Supported CUDA versions: `10.0`, `10.1`, `10.2`, `11.5.1` and `12.1.0` in all images, `latest` tag is not used as a best practice implementation.
 
 
-### `xmindai/cuda-cudnn-opengl` 
+### `xmindai/cuda-cudnn-opengl`
+
 > [DockerHUB link](https://hub.docker.com/repository/docker/xmindai/cuda-cudnn-opengl)
 
 Content:
@@ -47,36 +49,44 @@ Content:
 * CUDA OpenGL-dev
 
 ### `xmindai/cuda-cpp`
+
 > [DockerHUB link](https://hub.docker.com/repository/docker/xmindai/cuda-cpp)
 
 Built on `xmindai/cuda-cudnn-opengl`
+
 * User layer - support for arbitrary user to log in
 * TensorRT development (in labels CUDA10.0 and CUDA10.2)
 * Development layer from folder `general-development`, supporting complete, graphical dev life-cycle in a single container
 
 ### `xmindai/cuda-python`
+
 > [DockerHUB link](https://hub.docker.com/repository/docker/xmindai/cuda-python)
 
 Built on `xmindai/cuda-cpp`
+
 Adds CUDA Python libs with Anaconda:
+
 * PyTorch - GPU 
 * Tensorflow - GPU
 * CUDA RAPIDS
 * Many more defined in `cuda-python-development/requirements.txt`
 
-# Start container examples
+## Start container examples
 
 Start interactive session:
+
 ```bash
 docker-compose -f xmind-development/docker-compose.yml run dev
 ```
 
 Start ssh service (background):
+
 ```bash
 docker-compose -f xmind-development/docker-compose.yml up -d ssh
 ```
 
 Kill ssh service:
+
 ```bash
 docker-compose -f xmind-development/docker-compose.yml down ssh
 ```
