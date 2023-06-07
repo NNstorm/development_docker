@@ -10,6 +10,7 @@ graphviz
 h5py
 ipython
 jupyterlab
+lightning
 matplotlib
 mkl
 mkl-include
@@ -22,12 +23,13 @@ plotly
 pylint
 pytest
 pyyaml
-rapids=0.13
 requests
 setuptools
 shapely
 slackclient
 tensorboard
 tensorboardX
-tensorflow-gpu
+tensorflow
+torchvision
+torchaudio
 tqdm

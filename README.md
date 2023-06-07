@@ -35,7 +35,7 @@ Set Nvidia as default container runtime for Docker in `/etc/docker/daemon.json`,
 To make development portable and deployable on cloud, it is recommended to run the IDE inside the container. Legacy solution installed the IDE inside the container which resulted in large container sizes (moving around useless packages). Best practice is to mount your IDE inside the container (to be specified in the docker-compose file or docker run) and start them from the container. GUI access is granted on Intel, AMD and NVIDIA GPUs by default. This enables portable code and easier cooperation of teams.
 
 ## Available Docker images
-Supported CUDA versions: `10.0`, `10.1`, `10.2` in all images, `latest` tag is not used as a best practice implementation.
+Supported CUDA versions: `10.0`, `10.1`, `10.2`, `11.5.1` in all images, `latest` tag is not used as a best practice implementation.
 
 
 ### `xmindai/cuda-cudnn-opengl` 
