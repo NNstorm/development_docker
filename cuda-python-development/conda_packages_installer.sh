@@ -19,6 +19,10 @@ fi
 if [ "$cuda" == "11.5.1" ]; then
     conda install -y -c rapidsai -c nvidia -c conda-forge -c defaults -c pytorch-nightly -c anaconda python=3.9 cudatoolkit=11.5 pytorch=1.11 --file /tmp/requirements.txt
 fi
+if [ "$cuda" == "11.8.0" ]; then
+    conda install -y -c nvidia -c conda-forge -c pytorch-nightly -c anaconda python=3.10 pytorch pytorch-cuda=11.8 --file /tmp/requirements.txt
+    # conda install -y -c rapidsai -c conda-forge -c nvidia rapids=23.04 python=3.10
+fi
 if [ "$cuda" == "12.1.1" ]; then
     conda install -y -c rapidsai -c nvidia -c conda-forge -c pytorch-nightly -c anaconda python=3.10 pytorch pytorch-cuda=12.1 --file /tmp/requirements.txt
 fi

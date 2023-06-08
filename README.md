@@ -1,4 +1,5 @@
 # Development Docker images
+
 Deep learning development tools using Docker
 
 [![Build Status](https://dev.azure.com/XMindAI/OpenXMind/_apis/build/status/xmind.ai%20-%20Docker%20Development?branchName=master)](https://dev.azure.com/XMindAI/OpenXMind/_build/latest?definitionId=6&branchName=master)
@@ -10,6 +11,7 @@ Deep learning development tools using Docker
 
 
 Add these lines to your .bashrc or .zshrc, this enables using docker with own user:
+
 ```bash
 export GID=$(id -g)
 export USER=$(id -u -n)
@@ -18,6 +20,7 @@ export HOST_UID=$(id -u)
 ```
 
 Set Nvidia as default container runtime for Docker in `/etc/docker/daemon.json`, it is needed to run docker-compose:
+
 ```
 {
     "default-runtime": "nvidia",
@@ -36,14 +39,14 @@ To make development portable and deployable on cloud, it is recommended to run t
 
 ## Available Docker images
 
-Supported CUDA versions: `10.0`, `10.1`, `10.2`, `11.5.1` and `12.1.0` in all images, `latest` tag is not used as a best practice implementation.
-
+Supported CUDA versions: `10.0`, `10.1`, `10.2`, `11.5.1`, `11.8.0` and `12.1.0` in all images, `latest` tag is not used as a best practice implementation.
 
 ### `xmindai/cuda-cudnn-opengl`
 
 > [DockerHUB link](https://hub.docker.com/repository/docker/xmindai/cuda-cudnn-opengl)
 
 Content:
+
 * CUDA-dev
 * CUDNN-dev
 * CUDA OpenGL-dev
