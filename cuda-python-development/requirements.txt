@@ -33,3 +33,6 @@ tensorflow
 torchvision
 torchaudio
 tqdm
+fairscale
+fire
+sentencepiece
