@@ -36,3 +36,4 @@ tqdm
 fairscale
 fire
 sentencepiece
+transformers
