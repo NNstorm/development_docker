@@ -29,11 +29,8 @@ shapely
 slackclient
 tensorboard
 tensorboardX
-tensorflow
 torchvision
 torchaudio
 tqdm
-fairscale
 fire
 sentencepiece
-transformers
