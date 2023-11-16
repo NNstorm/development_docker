@@ -8,7 +8,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && \
     autoconf automake bison build-essential byacc bzip2 ca-certificates ccache clang cmake cowsay curl dnsutils \
     emacs flake8 flex gcc gdb gdbserver git git-lfs htop inetutils-ping iproute2 less libcanberra-gtk-module \
     libfontconfig1 libfreetype6-dev libgtk2.0-0 libjpeg-dev libpng-dev libprotoc-dev libx11-6 libxext-dev \
-    libxrender-dev libxtst-dev lldb llvm mesa-utils nano net-tools openssh-client openssh-server protobuf-compiler \
+    libxrender-dev libxtst-dev lldb llvm mc mesa-utils nano net-tools nvtop nmon openssh-client openssh-server protobuf-compiler \
     rsync sl software-properties-common sudo tcpdump telnet x11vnc xvfb \
     tmux traceroute tree valgrind vim wget xauth zsh && \
     add-apt-repository ppa:git-core/ppa -y && \
@@ -43,3 +43,10 @@ RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add 
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
 
+# Microsoft Azure azcopy
+RUN wget https://aka.ms/downloadazcopy-v10-linux && \
+    tar xvzf downloadazcopy-v10-linux && \
+    sudo mv azcopy*/azcopy /usr/local/bin/ && \
+    chmod +x /usr/local/bin/azcopy && \
+    rm -rf azcopy* && \
+    rm -rf downloadazcopy-v10-linux

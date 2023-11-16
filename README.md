@@ -39,7 +39,7 @@ To make development portable and deployable on cloud, it is recommended to run t
 
 ## Available Docker images
 
-Supported CUDA versions: `10.0`, `10.1`, `10.2`, `11.5.1`, `11.8.0` and `12.1.0` in all images, `latest` tag is not used as a best practice implementation.
+Supported CUDA versions: `11.8.0` and `12.1.1` in all images, `latest` tag is not used as a best practice implementation.
 
 ### `xmindai/cuda-cudnn-opengl`
 
@@ -58,7 +58,6 @@ Content:
 Built on `xmindai/cuda-cudnn-opengl`
 
 * User layer - support for arbitrary user to log in
-* TensorRT development (in labels CUDA10.0 and CUDA10.2)
 * Development layer from folder `general-development`, supporting complete, graphical dev life-cycle in a single container
 
 ### `xmindai/cuda-python`
