@@ -79,7 +79,7 @@ stages:
         steps:
           - script: nvidia-cuda-cudnn-opengl/build.sh nvidia/cuda:$(base_tag) $(azure_dtr)/cuda-cudnn-opengl:$(tag)
             displayName: "Build cuda opengl docker"
-          - script: cd ci && ./build_cuda_cpp.sh $(azure_dtr)/cuda-cudnn-opengl:$(tag) $(azure_dtr)/cuda-cpp:$(tag) $(cuda)
+          - script: cd ci && ./build_cuda_cpp.sh $(azure_dtr)/cuda-cudnn-opengl:$(tag) $(azure_dtr)/cuda-cpp:$(tag) $(cuda) ubuntu1804 x86_64
             displayName: "Build cuda-cpp docker"
 
           - task: Docker@2
