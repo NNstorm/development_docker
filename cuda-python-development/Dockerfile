@@ -1,5 +1,5 @@
 ARG from
-FROM $from as conda
+FROM $from as pyenv
 
 ARG cuda
 ARG PYTHON_VERSION="3.11.7"

@@ -66,7 +66,7 @@ Built on `xmindai/cuda-cudnn-opengl`
 
 Built on `xmindai/cuda-cpp`
 
-Adds CUDA Python libs with Anaconda:
+Adds CUDA Python libs with `pyenv`:
 
 * PyTorch - GPU 
 * Tensorflow - GPU
