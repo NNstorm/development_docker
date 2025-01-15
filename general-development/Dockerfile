@@ -36,13 +36,9 @@ RUN cd /tmp && wget https://aka.ms/InstallAzureCLIDeb && bash ./InstallAzureCLID
     rm -rf /tmp/*
 
 # Kubectl
-RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
-    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list &&\
-    apt-get update && \
-    apt install -y kubectl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf /tmp/*
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" &&\
+    chmod +x kubectl &&\
+    sudo mv kubectl /usr/local/bin
 
 # Microsoft Azure azcopy
 RUN wget https://aka.ms/downloadazcopy-v10-linux && \
