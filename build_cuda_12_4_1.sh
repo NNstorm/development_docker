@@ -27,4 +27,4 @@ docker push $TAG
 # install:
 # sudo curl -sL https://github.com/shinsenter/docker-squash/raw/main/docker-squash.sh -o /usr/local/bin/docker-squash.sh
 # sudo chmod +x /usr/local/bin/docker-squash.sh
-docker-squash.sh $TAG -t $TAG-mini --build-arg PRESQUASH_SCRIPTS='rm -rf /tmp/* /usr/share/doc/* /var/cache/* /var/lib/apt/lists/* /var/log/* /opt/nvidia'
+docker-squash.sh $TAG -t $TAG-mini --build-arg PRESQUASH_SCRIPTS='rm -rf /tmp/* /usr/share/doc/* /opt/nvidia'
