@@ -5,7 +5,7 @@ ARG cuda
 ARG python_version
 ENV PYENV_ROOT="/opt/pyenv"
 
-RUN git clone --depth 1 --branch v2.3.35 https://github.com/pyenv/pyenv.git $PYENV_ROOT &&\
+RUN git clone --depth 1 --branch v2.6.1 https://github.com/pyenv/pyenv.git $PYENV_ROOT &&\
     echo "PYENV_ROOT=$PYENV_ROOT" >> /root/.bashrc &&\
     echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> /root/.bashrc &&\
     echo 'eval "$(pyenv init -)"' >> /root/.bashrc &&\
