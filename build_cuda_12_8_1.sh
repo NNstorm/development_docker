@@ -4,7 +4,7 @@ set -e
 OS_VERSION="ubuntu24.04"
 CUDA_VERSION="12.8.1"
 BASE="nvidia/cuda:${CUDA_VERSION}-cudnn-devel-${OS_VERSION}"
-TAG="xmindai/cuda-python:${OS_VERSION}-${CUDA_VERSION}-cudnn-py${PYTHON_VERSION}"
+TAG="xmindai/cuda-python:${OS_VERSION}-${CUDA_VERSION}-cudnn"
 
 cd general-development
 ./build.sh $BASE $BASE-dev
