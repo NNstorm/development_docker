@@ -2,7 +2,7 @@
 set -e
 
 OS_VERSION="ubuntu24.04"
-CUDA_VERSION="13.0.1"
+CUDA_VERSION="13.0.2"
 BASE="nvidia/cuda:${CUDA_VERSION}-cudnn-devel-${OS_VERSION}"
 TAG="xmindai/cuda-python:${OS_VERSION}-${CUDA_VERSION}-cudnn"
 
